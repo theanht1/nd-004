@@ -17,11 +17,11 @@
 import os
 import webapp2
 import jinja2
+from google.appengine.ext import db
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                 autoescape = True)
-
 
 class Handler(webapp2.RequestHandler):
     def write(self, *a, **kw):
@@ -48,10 +48,47 @@ class ROT13Hander(Handler):
             return char
 
         rot13_text = ''.join(map(convert, self.request.get('text')))
-        print(rot13_text)
         self.render('rot13.html', text = rot13_text)
 
 
+class Post(db.Model):
+    title = db.StringProperty(required = True)
+    body = db.TextProperty(required = True)
+    created = db.DateTimeProperty(auto_now_add = True)
+
+class PostIndexHandler(Handler):
+    def get(self):
+        posts = Post.all().order('-created')
+        self.render('post_index.html', posts = posts)
+
+class NewPostHandler(Handler):
+    def render_form(self, title='', body='', error=''):
+        self.render('new_post.html', title = title,
+                    body = body, error = error)
+
+    def get(self):
+        self.render_form()
+
+    def post(self):
+        title = self.request.get('title')
+        body = self.request.get('body')
+
+        if title and body:
+            post = Post(title = title, body = body)
+            post.put()
+            self.redirect('/blogs/%s' % str(post.key().id()))
+        else:
+            error = 'We need both title and body'
+            self.render_form(title, body, error)
+
+class PostDetailHander(Handler):
+    def get(self, post_id):
+        post = Post.get_by_id(int(post_id))
+        self.render('post_detail.html', post = post)
+
 app = webapp2.WSGIApplication([
-    ('/unit2/rot13', ROT13Hander)
+    ('/unit2/rot13', ROT13Hander),
+    ('/blogs/?', PostIndexHandler),
+    ('/blogs/newpost', NewPostHandler),
+    ('/blogs/([0-9]+)', PostDetailHander),
 ], debug=True)
