@@ -3,9 +3,9 @@
 {% block content %}
     {% for post in posts %}
         <div>
-            <h4>{{ post.title }}</h4>
+            <h4>{{ post.subject }}</h4>
             <hr>
-            <pre>{{ post.body }}</pre>
+            <pre>{{ post.content }}</pre>
         </div>
     {% endfor %}
 {% endblock %}

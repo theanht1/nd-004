@@ -108,8 +108,8 @@ class WelcomeHandler(Handler):
             self.redirect('/unit2/signup')
 
 class Post(db.Model):
-    title = db.StringProperty(required = True)
-    body = db.TextProperty(required = True)
+    subject = db.StringProperty(required = True)
+    content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
 
 class PostIndexHandler(Handler):
@@ -118,24 +118,24 @@ class PostIndexHandler(Handler):
         self.render('post_index.html', posts = posts)
 
 class NewPostHandler(Handler):
-    def render_form(self, title='', body='', error=''):
-        self.render('new_post.html', title = title,
-                    body = body, error = error)
+    def render_form(self, subject='', content='', error=''):
+        self.render('new_post.html', subject = subject,
+                    content = content, error = error)
 
     def get(self):
         self.render_form()
 
     def post(self):
-        title = self.request.get('title')
-        body = self.request.get('body')
+        subject = self.request.get('subject')
+        content = self.request.get('content')
 
-        if title and body:
-            post = Post(title = title, body = body)
+        if subject and content:
+            post = Post(subject = subject, content = content)
             post.put()
             self.redirect('/blog/%s' % str(post.key().id()))
         else:
-            error = 'We need both title and body'
-            self.render_form(title, body, error)
+            error = 'We need both subject and content'
+            self.render_form(subject, content, error)
 
 class PostDetailHander(Handler):
     def get(self, post_id):
