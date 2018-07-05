@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h4>new post</h4>
+    <form method="post">
+        <div>
+            <label>subject</label>
+            <br>
+            <input type="text" name="title" value="{{title}}">
+        </div>
+
+        <div>
+            <label>body</label>
+            <br>
+            <textarea name="body">{{body}}</textarea>
+        </div>
+
+        <p style="color: red">{{error}}</p>
+        <input type="submit">
+    </form>
+{% endblock %}

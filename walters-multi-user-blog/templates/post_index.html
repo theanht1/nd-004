@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% for post in posts %}
+        <div>
+            <h4>{{ post.subject }}</h4>
+            <hr>
+            <pre>{{ post.content }}</pre>
+        </div>
+    {% endfor %}
+{% endblock %}
