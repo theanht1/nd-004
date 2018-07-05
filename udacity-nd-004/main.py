@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 import os
+import re
 import webapp2
 import jinja2
 from google.appengine.ext import db
@@ -51,6 +52,61 @@ class ROT13Hander(Handler):
         self.render('rot13.html', text = rot13_text)
 
 
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+def valid_username(username):
+    return username and USER_RE.match(username)
+
+PASS_RE = re.compile(r"^.{3,20}$")
+def valid_password(password):
+    return password and PASS_RE.match(password)
+
+EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+def valid_email(email):
+    return not email or EMAIL_RE.match(email)
+
+class SignupHandler(Handler):
+
+    def get(self):
+        self.render("signup-form.html")
+
+    def post(self):
+        have_error = False
+        username = self.request.get('username')
+        password = self.request.get('password')
+        verify = self.request.get('verify')
+        email = self.request.get('email')
+
+        params = dict(username = username,
+                      email = email)
+
+        if not valid_username(username):
+            params['error_username'] = "That's not a valid username."
+            have_error = True
+
+        if not valid_password(password):
+            params['error_password'] = "That wasn't a valid password."
+            have_error = True
+        elif password != verify:
+            params['error_verify'] = "Your passwords didn't match."
+            have_error = True
+
+        if not valid_email(email):
+            params['error_email'] = "That's not a valid email."
+            have_error = True
+
+        if have_error:
+            self.render('signup-form.html', **params)
+        else:
+            self.redirect('/unit2/welcome?username=' + username)
+
+class WelcomeHandler(Handler):
+    def get(self):
+        username = self.request.get('username')
+        if valid_username(username):
+            self.render('welcome.html', username = username)
+        else:
+            self.redirect('/unit2/signup')
+
 class Post(db.Model):
     title = db.StringProperty(required = True)
     body = db.TextProperty(required = True)
@@ -76,7 +132,7 @@ class NewPostHandler(Handler):
         if title and body:
             post = Post(title = title, body = body)
             post.put()
-            self.redirect('/blogs/%s' % str(post.key().id()))
+            self.redirect('/blog/%s' % str(post.key().id()))
         else:
             error = 'We need both title and body'
             self.render_form(title, body, error)
@@ -88,7 +144,9 @@ class PostDetailHander(Handler):
 
 app = webapp2.WSGIApplication([
     ('/unit2/rot13', ROT13Hander),
-    ('/blogs/?', PostIndexHandler),
-    ('/blogs/newpost', NewPostHandler),
-    ('/blogs/([0-9]+)', PostDetailHander),
+    ('/unit2/signup', SignupHandler),
+    ('/unit2/welcome', WelcomeHandler),
+    ('/blog/?', PostIndexHandler),
+    ('/blog/newpost', NewPostHandler),
+    ('/blog/([0-9]+)', PostDetailHander),
 ], debug=True)
