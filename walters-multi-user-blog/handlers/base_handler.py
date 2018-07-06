@@ -12,6 +12,10 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
 class BaseHandler(RequestHandler):
+    def __init__(self, *a, **kw):
+        super(BaseHandler, self).__init__(*a, **kw)
+        self.current_user = None
+
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
 
@@ -28,7 +32,17 @@ class BaseHandler(RequestHandler):
                                  max_age = 3600)
 
     def get_current_user(self):
+        if self.current_user:
+            return self.current_user
+
         user_cookie = self.request.cookies.get('user')
         if user_cookie and check_valid_cookie(user_cookie):
             user_id = user_cookie.split('|')[0]
-            return User.get_by_id(int(user_id))
+            self.current_user = User.get_by_id(int(user_id))
+            return self.current_user
+
+    def check_user_login(self):
+        if not self.get_current_user():
+            return self.redirect('/', abort = True)
+
+        return True
