@@ -19,6 +19,7 @@ import re
 import webapp2
 import jinja2
 from google.appengine.ext import db
+import handlers
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -143,9 +144,8 @@ class PostDetailHander(Handler):
         self.render('post_detail.html', post = post)
 
 app = webapp2.WSGIApplication([
-    ('/unit2/rot13', ROT13Hander),
-    ('/unit2/signup', SignupHandler),
-    ('/unit2/welcome', WelcomeHandler),
+    ('/signup/?', handlers.SignupHandler),
+    ('/login/?', handlers.LoginHandler),
     ('/blog/?', PostIndexHandler),
     ('/blog/newpost', NewPostHandler),
     ('/blog/([0-9]+)', PostDetailHander),
