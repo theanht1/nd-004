@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <a href="/new-post">New Post</a>
-    {% for post in posts %}
-        <div>
-            <h4>{{ post.subject }}</h4>
-            <hr>
-            <pre>{{ post.content }}</pre>
-            <a href="/posts/{{post.key().id()}}">Read more</a>
-        </div>
-    {% endfor %}
+  <div style="display: flex; flex-direction: row-reverse; width: 100%">
+    <a href="/new-post" style="margin-right: 7px;">
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+        New Post
+      </button>
+    </a>
+  </div>
+  {% for post in posts %}
+    {% include 'components/post_simple.html' %}
+  {% endfor %}
 {% endblock %}

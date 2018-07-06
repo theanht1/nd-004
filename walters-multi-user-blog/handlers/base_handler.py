@@ -19,6 +19,14 @@ class BaseHandler(RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
 
+    def render_json(self, data, code=200):
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.set_status(code)
+        self.write(**data)
+
+    def render_json_error(self, message, code=400):
+        self.render_json({ 'error': message }, code = code)
+
     def render_str(self, template, **params):
         tml = jinja_env.get_template(template)
         return tml.render(params)

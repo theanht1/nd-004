@@ -1,0 +1,15 @@
+<div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__media mdl-color-text--grey-50">
+    <h3><a href="/posts/{{post.key().id()}}">{{post.subject}}</a></h3>
+  </div>
+  <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+    {{post.content}}
+  </div>
+  <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+    <div class="minilogo"></div>
+    <div>
+      <strong>{{post.user.username}}</strong>
+      <span>{{post.created}}</span>
+    </div>
+  </div>
+</div>

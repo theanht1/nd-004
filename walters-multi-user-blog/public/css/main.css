@@ -1,0 +1,24 @@
+.wlt .mdl-layout__header,
+.wlt .mdl-layout__drawer-button{
+    color: #fff !important;
+}
+
+.wlt.mdl-layout .mdl-layout__content {
+    padding-top: 150px;
+}
+
+.new-post {
+    align-self: center;
+}
+
+.new-post .mdl-textfield {
+    min-width: 500px;
+}
+
+.bg-color-primary {
+    background-color: #3f51b5 !important;
+}
+
+.text-white {
+    color: #fff !important;
+}
