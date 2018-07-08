@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <div style="display: flex; flex-direction: row-reverse; width: 100%">
-    <a href="/new-post" style="margin-right: 7px;">
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-        New Post
-      </button>
-    </a>
-  </div>
+  {% if current_user %}
+    <div style="display: flex; flex-direction: row-reverse; width: 100%">
+      <a href="/new-post" style="margin-right: 7px;">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          New Post
+        </button>
+      </a>
+    </div>
+  {% endif %}
   {% for post in posts %}
     {% include 'components/post_simple.html' %}
   {% endfor %}

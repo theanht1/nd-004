@@ -32,6 +32,7 @@ app = webapp2.WSGIApplication([
     ('/logout', handlers.LogoutHandler),
     ('/new-post', handlers.NewPostHandler),
     ('/posts/([0-9]+)', handlers.PostDetailHander),
+    ('/posts/([0-9]+)/edit', handlers.PostEditHandler),
     ('/posts/([0-9]+)/likes', handlers.TriggerLikePostHandler),
     ('/posts/([0-9]+)/comments', handlers.AddCommentHandler),
     ('/users/([0-9]+)/posts', handlers.UserPostIndexHandler),

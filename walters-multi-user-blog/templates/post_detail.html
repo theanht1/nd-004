@@ -3,8 +3,15 @@
 {% block content %}
   <div id="post-detail-{{post.key().id()}}" class="demo-blog--blogpost">
     <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
-      <div class="mdl-card__media mdl-color-text--grey-50">
+      <div class="post-header mdl-card__media mdl-color-text--grey-50">
         <h3>{{post.subject}}</h3>
+        {% if current_user and post.user.key() == current_user.key() %}
+          <a href="/posts/{{post.key().id()}}/edit">
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+              <i class="material-icons">edit</i>
+            </button>
+          </a>
+        {% endif %}
       </div>
       <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
         <div class="minilogo"></div>

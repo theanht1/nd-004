@@ -1,3 +1,4 @@
+/* Global */
 .wlt .mdl-layout__header,
 .wlt .mdl-layout__drawer-button{
     color: #fff !important;
@@ -5,14 +6,6 @@
 
 .wlt.mdl-layout .mdl-layout__content {
     padding-top: 50px;
-}
-
-.new-post {
-    align-self: center;
-}
-
-.new-post .mdl-textfield {
-    min-width: 500px;
 }
 
 .bg-color-primary {
@@ -36,7 +29,30 @@
     color: #e1e7f2;
     text-align: center;
 }
+/* End Global */
 
+/* New Post */
+.new-post {
+    align-self: center;
+}
+
+.new-post .mdl-textfield {
+    min-width: 500px;
+}
+/* End New Post */
+
+/* Post Detail */
 .wlt .demo-blog--blogpost {
     width: 100%;
 }
+
+.post-header {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.post-header button.mdl-button--fab {
+    background-color: #fff;
+}
+/* End Post Detail */

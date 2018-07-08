@@ -5,7 +5,9 @@
     <div class="new-post">
       <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
         <form method="post">
-        <h4>Create New Post</h4>
+          <h4>
+            {{ 'Create New Post' if type == 'new' else 'Edit Post' }}
+          </h4>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="text" value="{{subject}}" name="subject" id="subject">
             <label class="mdl-textfield__label" for="subject">Subject</label>
