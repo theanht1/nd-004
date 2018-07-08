@@ -16,6 +16,10 @@
     color: #fff !important;
 }
 
+.text-red {
+    color: red;
+}
+
 .wlt .mdl-layout-title a {
     text-decoration: none;
     color: #fff;
@@ -29,11 +33,12 @@
     color: #e1e7f2;
     text-align: center;
 }
+
 /* End Global */
 
 /* New Post */
 .new-post {
-    align-self: center;
+    margin: 10px auto;
 }
 
 .new-post .mdl-textfield {
@@ -54,5 +59,11 @@
 
 .post-header button.mdl-button--fab {
     background-color: #fff;
+}
+
+.demo-blog .mdl-card__supporting-text.post-content {
+    -webkit-align-items: unset;
+    -ms-flex-align: unset;
+    align-items: unset;
 }
 /* End Post Detail */

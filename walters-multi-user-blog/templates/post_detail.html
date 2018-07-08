@@ -16,8 +16,10 @@
       <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
         <div class="minilogo"></div>
         <div>
-          <strong>{{post.user.username}}</strong>
-          <span>{{post.created}}</span>
+          <a href="/users/{{post.user.key().id()}}/posts">
+            <strong>{{post.user.username}}</strong>
+          </a>
+          <span>{{post.created.strftime("%Y-%m-%d")}}</span>
         </div>
         <div class="section-spacer"></div>
         <div class="meta__favorites">
@@ -32,8 +34,10 @@
           <span class="visuallyhidden">favorites</span>
         </div>
       </div>
-      <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
-        {{post.content}}
+      <div class="post-content mdl-color-text--grey-700 mdl-card__supporting-text">
+        {% autoescape false %}
+          {{post.content | e | replace('\n', '<br/>')}}
+        {% endautoescape %}
       </div>
       <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
         <form @submit.stop.prevent="">
@@ -45,22 +49,26 @@
           </div>
           <button
             @click="addComment"
-            class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+            {{ 'disabled' if not current_user }}>
             <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
           </button>
         </form>
         <div class="comment mdl-color-text--grey-700">
           <div
             v-for="comment in comments"
+            style="margin-bottom: 10px"
           >
             <header class="comment__header">
               <div class="comment__author">
-                <strong>${comment.user.username}</strong>
-                <span>${comment.created}</span>
+                <a :href="`/users/${comment.user.id}/posts`">
+                  <strong>${comment.user.username}</strong>
+                </a>
+                <span>&nbsp ${timeAgo(comment.created)}</span>
               </div>
             </header>
             <div class="comment__text">
-              ${comment.content}
+              <p v-html="renderContent(comment.content)"></p>
             </div>
           </div>
         </div>
@@ -91,6 +99,14 @@
       },
 
       methods: {
+        timeAgo(time) {
+          return moment(time).fromNow()
+        },
+
+        renderContent(txt) {
+          return txt.replace(/\n/g, '<br>')
+        },
+
         triggerLike() {
           axios.post('/posts/{{post.key().id()}}/likes')
             .then(() => {

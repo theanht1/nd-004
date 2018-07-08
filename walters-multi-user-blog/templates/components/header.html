@@ -1,4 +1,4 @@
-<header class="wlt-header mdl-layout__header mdl-layout__header--transparent">
+<header id="header" class="wlt-header mdl-layout__header mdl-layout__header--transparent">
   <div class="mdl-layout__header-row">
     <!-- Title -->
     <span class="mdl-layout-title">
@@ -12,8 +12,9 @@
         <a class="mdl-navigation__link" href="/signup">Signup</a>
         <a class="mdl-navigation__link" href="/login">Login</a>
       {% else %}
+        <p class="mdl-navigation__link">Hello {{current_user.username}},</p>
         <a class="mdl-navigation__link" href="/users/{{current_user.key().id()}}/posts">My Posts</a>
-        <a class="mdl-navigation__link" href="/logout">Logout</a>
+        <a class="mdl-navigation__link" @click="logout" href="#">Logout</a>
       {% endif %}
     </nav>
   </div>
@@ -33,3 +34,17 @@
     {% endif %}
   </nav>
 </div>
+
+<script>
+new Vue({
+  el: '#header',
+  methods: {
+    logout() {
+      return axios.post('/logout')
+        .then(() => {
+          window.location.href = '/'
+        })
+    },
+  },
+})
+</script>

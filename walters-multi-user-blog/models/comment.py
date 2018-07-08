@@ -9,5 +9,5 @@ class Comment(db.Model):
                                 collection_name='comments')
     post = db.ReferenceProperty(Post, required = True,
                                 collection_name='comments')
-    content = db.StringProperty(required = True)
+    content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)

@@ -10,7 +10,8 @@ base_path = os.path.dirname(os.path.dirname(__file__))
 template_dir = os.path.join(base_path, 'templates')
 
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
-                               autoescape = True)
+                               extensions=['jinja2.ext.autoescape'], autoescape = True)
+
 
 class BaseHandler(RequestHandler):
     def __init__(self, *a, **kw):

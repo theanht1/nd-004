@@ -1,28 +1,27 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>Login</h2>
-    <form method="post">
-        <table>
-            <tr>
-                <td>
-                    Username
-                </td>
-                <td>
-                    <input type="text" name="username" value="{{username}}">
-                </td>
-            </tr>
+  <div class="mdl-card mdl-cell mdl-cell--12-col">
+    <div class="new-post">
+      <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+        <form method="post">
+          <h4>
+            Login
+          </h4>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" value="{{username}}" name="username" id="username">
+            <label class="mdl-textfield__label" for="username">Username</label>
+          </div>
+          <br>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" name="password" id="password" value="{{password}}">
+            <label class="mdl-textfield__label" for="password">Password</label>
+          </div>
 
-            <tr>
-                <td>
-                    Password
-                </td>
-                <td>
-                    <input type="password" name="password" value="">
-                </td>
-            </tr>
-        </table>
-        <p>{{error}}</p>
-        <input type="submit">
-    </form>
+          <p style="color: red">{{error}}</p>
+          <button type="submit" class="bg-color-primary text-white mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

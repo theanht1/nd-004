@@ -1,58 +1,45 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h2>Signup</h2>
-    <form method="post">
-        <table>
-            <tr>
-                <td>
-                    Username
-                </td>
-                <td>
-                    <input type="text" name="username" value="{{username}}">
-                </td>
-                <td>
-                    {{error_username}}
-                </td>
-            </tr>
+  <div class="mdl-card mdl-cell mdl-cell--12-col">
+    <div class="new-post">
+      <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+        <form method="post">
+          <h4>
+            Signup
+          </h4>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" value="{{username}}" name="username" id="username">
+            <label class="mdl-textfield__label" for="username">Username</label>
+          </div>
+          <p class="text-red">{{error_username}}</p>
 
-            <tr>
-                <td>
-                    Password
-                </td>
-                <td>
-                    <input type="password" name="password" value="">
-                </td>
-                <td>
-                    {{error_password}}
-                </td>
-            </tr>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" name="password" id="password" value="{{password}}">
+            <label class="mdl-textfield__label" for="password">Password</label>
+          </div>
+          <p class="text-red">{{error_password}}</p>
 
-            <tr>
-                <td>
-                    Verify Password
-                </td>
-                <td>
-                    <input type="password" name="password_confirmation" value="">
-                </td>
-                <td>
-                    {{error_verify}}
-                </td>
-            </tr>
 
-            <tr>
-                <td>
-                    Email (optional)
-                </td>
-                <td>
-                    <input type="text" name="email" value="{{email}}">
-                </td>
-                <td>
-                    {{error_email}}
-                </td>
-            </tr>
-        </table>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" name="password_confirmation" id="password_confirmation" value="{{password_confirmation}}">
+            <label class="mdl-textfield__label" for="password_confirmation">Verify Password</label>
+          </div>
+          <p class="text-red">{{error_verify}}</p>
 
-        <input type="submit">
-    </form>
+
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="email" name="email" id="email" value="{{email}}">
+            <label class="mdl-textfield__label" for="email">Email</label>
+          </div>
+          <p class="text-red">{{error_email}}</p>
+
+
+          <p></p>
+          <button type="submit" class="bg-color-primary text-white mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Signup</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}
