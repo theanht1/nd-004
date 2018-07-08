@@ -3,7 +3,7 @@ from user import User
 from post import Post
 
 class Like(db.Model):
-    """ Model for post's like """
+    """ Model for post's likes """
 
     user = db.ReferenceProperty(User, required = True,
                                 collection_name='likes')

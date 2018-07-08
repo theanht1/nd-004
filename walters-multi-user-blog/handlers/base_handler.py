@@ -14,6 +14,13 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 
 class BaseHandler(RequestHandler):
+    """Basic handler for app
+    It consists some utility methods for rendering
+    and authenticating.
+
+    Extends:
+        RequestHandler
+    """
     def __init__(self, *a, **kw):
         super(BaseHandler, self).__init__(*a, **kw)
         self.current_user = None
@@ -34,14 +41,19 @@ class BaseHandler(RequestHandler):
         return tml.render(params)
 
     def render(self, template, **params):
+        """Render view with tempalte"""
         self.write(self.render_str(template,
             current_user = self.get_current_user(), **params))
 
     def set_current_user_cookie(self, user):
+        """Set user cookie for current user"""
         self.response.set_cookie('user', make_secure_cookie(user),
                                  max_age = 60 * 60 * 24)
 
     def get_current_user(self):
+        """Get current user and assign it to
+        instance variable `current_user`
+        """
         if self.current_user:
             return self.current_user
 

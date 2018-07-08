@@ -49,7 +49,7 @@ class PostEditHandler(BaseHandler):
 
     def check_post_permission(self, post_id):
         """Check user's authorization with this post.
-            Redirect to home if they don't have the permission
+        Redirect to home if they don't have the permission
 
         Arguments:
             post_id {int} -- [Post's id]
