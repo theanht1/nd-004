@@ -28,6 +28,10 @@ class SignupHandler(BaseHandler):
         if not validators.valid_email(email):
             params['error_email'] = "That's not a valid email."
 
+        exist_user = User.all().filter('username =', username).get()
+        if exist_user:
+            params['error_username'] = "Username has existed"
+
         # If validation failed
         if len(params) > 2:
             self.render('signup.html', **params)
