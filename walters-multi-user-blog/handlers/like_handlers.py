@@ -1,7 +1,7 @@
 from base_handler import BaseHandler
 from models import Like, Post
 
-class TriggerLikePost(BaseHandler):
+class TriggerLikePostHandler(BaseHandler):
     def post(self, post_id):
         self.check_user_login()
 
@@ -12,8 +12,10 @@ class TriggerLikePost(BaseHandler):
         if post.user.key() == self.current_user.key():
             return self.render_json_error('Can not like your post')
 
-        like = Like.gql('WHERE user = %s AND post = %s' % (self.current_user.key(),
-                                                           post.key())).get()
+        like = Like.all() \
+            .filter('user = ', self.current_user.key()) \
+            .filter('post = ', post.key()) \
+            .get()
 
         if like:
             like.delete()
@@ -21,4 +23,4 @@ class TriggerLikePost(BaseHandler):
             like = Like(post = post, user = self.current_user)
             like.put()
 
-        self.render_json({ 'success': True }, 204)
+        self.render_json({ 'success': True }, 200)

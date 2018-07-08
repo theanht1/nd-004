@@ -44,11 +44,17 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.grey-orange.min.css">
     <link rel="stylesheet" href="/public/styles.css">
     <link rel="stylesheet" href="/public/css/main.css">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
   <body>
     <div class="wlt demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded">
       {% include 'components/header.html' %}
       <main class="mdl-layout__content">
+        {% block title %}
+            <h1 class="title">Write your way</h1>
+        {% endblock %}
         <div class="demo-blog__posts mdl-grid">
           {% block content %}
           {% endblock %}

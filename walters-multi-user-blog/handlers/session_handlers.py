@@ -54,3 +54,8 @@ class LoginHandler(BaseHandler):
         else:
             self.set_current_user_cookie(user)
             self.redirect('/')
+
+class LogoutHandler(BaseHandler):
+    def post(self):
+        self.response.set_cookie('user', '')
+        self.redirect('/')

@@ -4,7 +4,7 @@
 }
 
 .wlt.mdl-layout .mdl-layout__content {
-    padding-top: 150px;
+    padding-top: 50px;
 }
 
 .new-post {
@@ -21,4 +21,22 @@
 
 .text-white {
     color: #fff !important;
+}
+
+.wlt .mdl-layout-title a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.wlt .mdl-layout__drawer .mdl-layout-title a {
+    color: #888;
+}
+
+.wlt .title {
+    color: #e1e7f2;
+    text-align: center;
+}
+
+.wlt .demo-blog--blogpost {
+    width: 100%;
 }

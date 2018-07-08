@@ -1,6 +1,7 @@
 import os
 from webapp2 import RequestHandler
 import jinja2
+import json
 
 from models import User
 from utils.authen_helpers import make_secure_cookie, check_valid_cookie
@@ -22,7 +23,7 @@ class BaseHandler(RequestHandler):
     def render_json(self, data, code=200):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.set_status(code)
-        self.write(**data)
+        self.write(json.dumps(data))
 
     def render_json_error(self, message, code=400):
         self.render_json({ 'error': message }, code = code)
@@ -37,7 +38,7 @@ class BaseHandler(RequestHandler):
 
     def set_current_user_cookie(self, user):
         self.response.set_cookie('user', make_secure_cookie(user),
-                                 max_age = 3600)
+                                 max_age = 60 * 60 * 24)
 
     def get_current_user(self):
         if self.current_user:

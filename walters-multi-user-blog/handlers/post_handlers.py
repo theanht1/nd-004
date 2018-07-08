@@ -1,5 +1,7 @@
 from base_handler import BaseHandler
-from models import Post
+from models import Post, Like
+from utils.helpers import map_comment
+import json
 
 class NewPostHandler(BaseHandler):
     def get(self):
@@ -24,4 +26,21 @@ class NewPostHandler(BaseHandler):
 class PostDetailHander(BaseHandler):
     def get(self, post_id):
         post = Post.get_by_id(int(post_id))
-        self.render('post_detail.html', post = post)
+        current_user = self.get_current_user()
+
+        is_user_like = False
+        if current_user:
+            like = Like.all() \
+                .filter('user = ', current_user.key()) \
+                .filter('post = ', post.key()) \
+                .get()
+
+            if like:
+                is_user_like = True
+
+        comments = post.comments.order('-created')
+
+        comments = json.dumps(list(map(lambda cmt: map_comment(cmt), comments)))
+
+        self.render('post_detail.html', post = post,
+                    is_user_like = is_user_like, comments = comments)

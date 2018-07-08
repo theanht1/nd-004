@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <div class="demo-blog--blogpost">
+  <div id="post-detail-{{post.key().id()}}" class="demo-blog--blogpost">
     <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
       <div class="mdl-card__media mdl-color-text--grey-50">
         <h3>{{post.subject}}</h3>
@@ -14,40 +14,96 @@
         </div>
         <div class="section-spacer"></div>
         <div class="meta__favorites">
-          425 <i class="material-icons" role="presentation">favorite</i>
+          ${nLikes} <i
+            @click="canLike ? triggerLike() : ''"
+            class="material-icons"
+            role="presentation"
+            :style="{
+              color: isUserLike ? 'red' : 'gray',
+              cursor: canLike ? 'pointer' : 'unset',
+            }">favorite</i>
           <span class="visuallyhidden">favorites</span>
-        </div>
-        <div>
-          <i class="material-icons" role="presentation">share</i>
-          <span class="visuallyhidden">share</span>
         </div>
       </div>
       <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
         {{post.content}}
       </div>
       <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
-        <form>
+        <form @submit.stop.prevent="">
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <textarea rows=1 class="mdl-textfield__input" id="comment"></textarea>
-            <label for="comment" class="mdl-textfield__label">Join the discussion</label>
+            <textarea
+              v-model="newComment"
+              rows=1 class="mdl-textfield__input" id="comment"></textarea>
+            <label for="comment" class="mdl-textfield__label">Add a comment</label>
           </div>
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+          <button
+            @click="addComment"
+            class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
             <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
           </button>
         </form>
         <div class="comment mdl-color-text--grey-700">
-          <header class="comment__header">
-            <img src="/public/images/co1.jpg" class="comment__avatar">
-            <div class="comment__author">
-              <strong>James Splayd</strong>
-              <span>2 days ago</span>
+          <div
+            v-for="comment in comments"
+          >
+            <header class="comment__header">
+              <div class="comment__author">
+                <strong>${comment.user.username}</strong>
+                <span>${comment.created}</span>
+              </div>
+            </header>
+            <div class="comment__text">
+              ${comment.content}
             </div>
-          </header>
-          <div class="comment__text">
-            In in culpa nulla elit esse. Ex cillum enim aliquip sit sit ullamco ex eiusmod fugiat. Cupidatat ad minim officia mollit laborum magna dolor tempor cupidatat mollit. Est velit sit ad aliqua ullamco laborum excepteur dolore proident incididunt in labore elit.
           </div>
         </div>
       </div>
     </div>
   </div>
+  <script>
+    new Vue({
+      delimiters: ['${', '}'],
+      el: '#post-detail-{{post.key().id()}}',
+      data() {
+        return {
+          currentUserId: {{current_user.key().id() if current_user else 'undefined'}},
+          postUserId: {{post.user.key().id()}},
+          postId: {{post.key().id()}},
+          nLikes: {{post.likes.count()}},
+          isUserLike: {{'true' if is_user_like else 'false'}},
+          comments: {{comments | safe}},
+
+          newComment: '',
+        };
+      },
+
+      computed: {
+        canLike() {
+          return this.currentUserId && this.currentUserId !== this.postUserId
+        },
+      },
+
+      methods: {
+        triggerLike() {
+          axios.post('/posts/{{post.key().id()}}/likes')
+            .then(() => {
+              this.nLikes += this.isUserLike ? -1 : 1
+              this.isUserLike = !this.isUserLike
+            }, (err) => {
+              alert(err.response.data.error)
+            })
+        },
+
+        addComment() {
+          axios.post('/posts/{{post.key().id()}}/comments', {
+            content: this.newComment,
+          })
+            .then(({data}) => {
+              this.newComment = ''
+              this.comments.unshift(data.comment)
+            })
+        },
+      },
+    })
+  </script>
 {% endblock %}
