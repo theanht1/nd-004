@@ -20,7 +20,7 @@
   </div>
 </header>
 
-<div class="mdl-layout__drawer">
+<div id="side-menu" class="mdl-layout__drawer">
   <span class="mdl-layout-title">
     <a href="/">Home</a>
   </span>
@@ -30,7 +30,7 @@
       <a class="mdl-navigation__link" href="/login">Login</a>
     {% else %}
       <a class="mdl-navigation__link" href="/users/{{current_user.key().id()}}/posts">My Posts</a>
-      <a class="mdl-navigation__link" href="/logout">Logout</a>
+      <a class="mdl-navigation__link" @click="logout" href="#">Logout</a>
     {% endif %}
   </nav>
 </div>
@@ -38,6 +38,18 @@
 <script>
 new Vue({
   el: '#header',
+  methods: {
+    logout() {
+      return axios.post('/logout')
+        .then(() => {
+          window.location.href = '/'
+        })
+    },
+  },
+})
+
+new Vue({
+  el: '#side-menu',
   methods: {
     logout() {
       return axios.post('/logout')
