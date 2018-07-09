@@ -10,4 +10,9 @@ This contains the code the first project of Part 3
 
 ### Testing
 
-Run `python tournament_test.py`
+1. Import SQL Scheme
+```
+psql
+\i tournament.sql
+```
+2. Run `python tournament_test.py`
