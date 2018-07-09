@@ -13,11 +13,9 @@ def connect():
 def execSql(cmd, vars=None):
     db = connect()
     cursor = db.cursor()
-    result = cursor.execute(cmd, vars)
+    cursor.execute(cmd, vars)
     db.commit()
     db.close()
-
-    return result
 
 def fetch(cmd):
     db = connect()
@@ -30,12 +28,12 @@ def fetch(cmd):
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    return execSql("DELETE FROM matches")
+    execSql("DELETE FROM matches")
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    return execSql("DELETE FROM players")
+    execSql("DELETE FROM players")
 
 
 def countPlayers():
@@ -52,7 +50,7 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    return execSql("INSERT INTO players (name) VALUES (%s)", (name,))
+    execSql("INSERT INTO players (name) VALUES (%s)", (name,))
 
 
 def playerStandings():
@@ -85,7 +83,7 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    return execSql("INSERT INTO matches VALUES (%s, %s, %s)",
+    execSql("INSERT INTO matches VALUES (%s, %s, %s)",
                     (winner, loser, winner))
 
 
