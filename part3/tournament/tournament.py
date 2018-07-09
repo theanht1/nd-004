@@ -68,11 +68,13 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    res = fetch("""SELECT p.id, p.name, COALESCE(wmc.n_match, 0) as wins, COUNT(m.id) as matches
-                    FROM players p
-                            LEFT JOIN winner_matches_count wmc on p.id = wmc.winner
-                            LEFT JOIN matches m on p.id = m.winner OR p.id = m.loser
+    return fetch("""SELECT p.id, p.name,
+                        COALESCE(wmc.n_match, 0) AS wins, COUNT(m.id) AS matches
+                    FROM players AS p
+                         LEFT JOIN matches AS m ON p.id = m.winner OR p.id = m.loser
+                         LEFT JOIN winner_matches_count AS wmc ON p.id = wmc.winner
                     GROUP BY p.id, wmc.n_match
+                    ORDER BY wins DESC
                  """)
     return res
 
@@ -83,7 +85,8 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    return execSql("INSERT INTO matches (winner, loser) VALUES (%s, %s)", (winner, loser))
+    return execSql("INSERT INTO matches (winner, loser) VALUES (%s, %s)",
+                    (winner, loser))
 
 
 def swissPairings():
@@ -102,4 +105,10 @@ def swissPairings():
         name2: the second player's name
     """
 
+    players = playerStandings()
+    pairs = []
+    for index in range(len(players) / 2):
+        p1, p2 = players[index * 2 : index * 2 + 2]
+        pairs.append((p1[0], p1[1], p2[0], p2[1]))
 
+    return pairs

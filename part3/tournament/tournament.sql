@@ -22,7 +22,7 @@ CREATE TABLE matches (
     loser integer references players(id)
 );
 
-CREATE VIEW winner_matches_count as
-    SELECT winner, COUNT(*) as n_match
+CREATE VIEW winner_matches_count AS
+    SELECT winner, COUNT(*) AS n_match
     FROM matches
     GROUP BY winner;
