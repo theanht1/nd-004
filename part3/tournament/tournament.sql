@@ -17,12 +17,9 @@ CREATE TABLE players (
 );
 
 CREATE TABLE matches (
-    id serial PRIMARY KEY,
+    player1 integer references players(id),
+    player2 integer references players(id),
     winner integer references players(id),
-    loser integer references players(id)
-);
 
-CREATE VIEW winner_matches_count AS
-    SELECT winner, COUNT(*) AS n_match
-    FROM matches
-    GROUP BY winner;
+    PRIMARY KEY (player1, player2)
+);
