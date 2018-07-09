@@ -4,6 +4,10 @@
     color: #fff !important;
 }
 
+.wlt .mdl-layout__header-row .mdl-navigation__link {
+    color: #fff;
+}
+
 .wlt.mdl-layout .mdl-layout__content {
     padding-top: 50px;
 }
@@ -30,7 +34,7 @@
 }
 
 .wlt .title {
-    color: #e1e7f2;
+    color: #fff;
     text-align: center;
 }
 
