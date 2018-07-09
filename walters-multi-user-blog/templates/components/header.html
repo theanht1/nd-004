@@ -1,4 +1,4 @@
-<header id="header" class="wlt-header mdl-layout__header mdl-layout__header--transparent">
+<header class="wlt-header mdl-layout__header mdl-layout__header--transparent">
   <div class="mdl-layout__header-row">
     <!-- Title -->
     <span class="mdl-layout-title">
@@ -14,13 +14,13 @@
       {% else %}
         <p class="mdl-navigation__link">Hello {{current_user.username}},</p>
         <a class="mdl-navigation__link" href="/users/{{current_user.key().id()}}/posts">My Posts</a>
-        <a class="mdl-navigation__link" @click="logout" href="#">Logout</a>
+        <a class="logout mdl-navigation__link" href="#">Logout</a>
       {% endif %}
     </nav>
   </div>
 </header>
 
-<div id="side-menu" class="mdl-layout__drawer">
+<div class="mdl-layout__drawer">
   <span class="mdl-layout-title">
     <a href="/">Home</a>
   </span>
@@ -30,33 +30,21 @@
       <a class="mdl-navigation__link" href="/login">Login</a>
     {% else %}
       <a class="mdl-navigation__link" href="/users/{{current_user.key().id()}}/posts">My Posts</a>
-      <a class="mdl-navigation__link" @click="logout" href="#">Logout</a>
+      <a class="logout mdl-navigation__link" href="#">Logout</a>
     {% endif %}
   </nav>
 </div>
 
 <script>
-new Vue({
-  el: '#header',
-  methods: {
-    logout() {
-      return axios.post('/logout')
+(function() {
+  const elements = document.getElementsByClassName('logout')
+  Array.from(elements).forEach(element => {
+    element.addEventListener('click', () => {
+      axios.post('/logout')
         .then(() => {
-          window.location.href = '/'
+          document.location.href = '/'
         })
-    },
-  },
-})
-
-new Vue({
-  el: '#side-menu',
-  methods: {
-    logout() {
-      return axios.post('/logout')
-        .then(() => {
-          window.location.href = '/'
-        })
-    },
-  },
-})
+    })
+  })
+})()
 </script>

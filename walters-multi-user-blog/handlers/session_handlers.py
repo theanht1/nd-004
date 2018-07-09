@@ -23,7 +23,7 @@ class SignupHandler(BaseHandler):
         if not validators.valid_password(password):
             params['error_password'] = "That wasn't a valid password."
         elif password != password_confirmation:
-            params['error_password_confirm'] = "Your passwords didn't match."
+            params['error_verify'] = "Your passwords didn't match."
 
         if not validators.valid_email(email):
             params['error_email'] = "That's not a valid email."
@@ -54,7 +54,7 @@ class LoginHandler(BaseHandler):
         user = User.gql("WHERE username = '%s'" % username).get()
         if not (user and is_user_authenticated(user, password)):
             self.render('login.html', username = username,
-                        error = 'username or password is wrong')
+                        error = 'Username or password is wrong')
         else:
             self.set_current_user_cookie(user)
             self.redirect('/')
