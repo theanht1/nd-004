@@ -4,7 +4,11 @@
   </div>
   <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
     {% autoescape false %}
+      {% if post.content | length < 300 %}
         {{post.content | e | replace('\n', '<br/>')}}
+      {% else %}
+        {{post.content[0:300] | e | replace('\n', '<br/>')}}...
+      {% endif %}
     {% endautoescape %}
   </div>
   <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
