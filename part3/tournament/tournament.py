@@ -83,7 +83,7 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    execSql("INSERT INTO matches VALUES (%s, %s, %s)",
+    execSql("INSERT INTO matches (player1, player2, winner) VALUES (%s, %s, %s)",
                     (winner, loser, winner))
 
 
