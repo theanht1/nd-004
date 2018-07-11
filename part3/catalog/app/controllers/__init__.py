@@ -1,10 +1,7 @@
 from flask import g
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-engine = create_engine('sqlite:///catalog_menu.db')
-# DBSession = sessionmaker(bind=engine)
-# session = DBSession()
+from app.db import get_engine
 
 from app import app
 from flask import g
@@ -13,7 +10,7 @@ from app.models import User
 
 @app.before_request
 def before_request():
-    g.session = scoped_session(sessionmaker(bind=engine))
+    g.session = scoped_session(sessionmaker(bind=get_engine()))
 
     user_id = login_session.get('user_id')
     if user_id:
