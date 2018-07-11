@@ -18,7 +18,7 @@ def catalogs_JSON():
     return render_json([c.serialize for c in catalogs])
 
 
-@app.route('/catalogs/<int:catalog_id>/')
+@app.route('/catalogs/<int:catalog_id>/items/')
 def catalog_items(catalog_id):
     catalogs = Catalog.get_all()
     catalog = Catalog.get_by_id(catalog_id)
@@ -27,7 +27,7 @@ def catalog_items(catalog_id):
                             items=items, catalog=catalog)
 
 
-@app.route('/catalogs/<int:catalog_id>/JSON')
+@app.route('/catalogs/<int:catalog_id>/item/JSON')
 def catalog_items_json(catalog_id):
     items = CatalogItem.get_by_catalog(catalog_id)
     print([i.serialize for i in items])

@@ -1,24 +1,20 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models import Base, Catalog
+from app import app
 
+def get_engine():
+    return create_engine(app.config['DB'])
 
-def get_engine(name='catalog_menu'):
-    return create_engine('sqlite:///%s.db' % name)
+def init_db():
+    Base.metadata.create_all(get_engine())
 
-def init_db(engine):
-    Base.metadata.create_all(engine)
-
-def create_session(engine):
-    DBSession = sessionmaker(bind=engine)
+def create_session():
+    DBSession = sessionmaker(bind=get_engine())
     return DBSession()
 
-def default_session():
-    engine = get_engine()
-    return create_session(engine)
-
-def seed(engine):
-    session = create_session(engine)
+def seed():
+    session = create_session()
     catalogs = [
         { 'name': 'Football' },
         { 'name': 'Baseball' },

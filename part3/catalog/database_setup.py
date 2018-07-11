@@ -1,6 +1,6 @@
+from app import app
 from app.db import get_engine, init_db, seed
 
-
-engine = get_engine()
-init_db(engine)
-seed(engine)
+app.config['DB'] = 'sqlite:///catalog_menu.db'
+init_db()
+seed()

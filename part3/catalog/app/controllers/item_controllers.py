@@ -40,6 +40,7 @@ def get_item(item_id):
         flash('Item not found', 'error')
         return redirect(url_for('home_page'))
 
+
 @app.route('/catalogs/items/<int:item_id>/JSON')
 def get_item_JSON(item_id):
     item = CatalogItem.get_by_id(item_id)
