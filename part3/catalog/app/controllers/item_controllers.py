@@ -2,7 +2,6 @@ from flask import g, render_template, request, redirect, flash, url_for
 from app import app
 from app.models import Catalog, CatalogItem
 from app.utils import render_json
-from . import session
 
 
 @app.route('/catalogs/items/new/', methods=['GET', 'POST'])
@@ -21,8 +20,8 @@ def add_new_item():
         if name and description and catalog_id:
             item = CatalogItem(name=name, description=description,
                                catalog_id=catalog_id, user_id=g.current_user.id)
-            session.add(item)
-            session.commit()
+            g.session.add(item)
+            g.session.commit()
             flash('Item %s is created' % item.name, 'info')
             return redirect(url_for('get_item', item_id=item.id))
 
@@ -59,8 +58,8 @@ def edit_item(item_id):
                 item.name = name
                 item.description = description
                 item.catalog_id = catalog_id
-                session.add(item)
-                session.commit()
+                g.session.add(item)
+                g.session.commit()
                 flash('Item %s is updated' % item.name, 'info')
                 return redirect(url_for('get_item', item_id=item.id))
 
@@ -80,9 +79,10 @@ def delete_item(item_id):
         if request.method == 'GET':
             return render_template('items/delete.html', item=item)
         else:
-            session.delete(item)
-            session.commit()
-            flash('Item %s is removed' % item.name, 'info')
+            item_name = item.name
+            g.session.delete(item)
+            g.session.commit()
+            flash('Item %s is removed' % item_name, 'info')
             return redirect(url_for('home_page'))
     else:
         flash('Item not found', 'error')

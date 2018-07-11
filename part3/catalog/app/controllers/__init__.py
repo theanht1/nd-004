@@ -1,9 +1,10 @@
+from flask import g
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 engine = create_engine('sqlite:///catalog_menu.db')
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+# DBSession = sessionmaker(bind=engine)
+# session = DBSession()
 
 from app import app
 from flask import g
@@ -12,11 +13,17 @@ from app.models import User
 
 @app.before_request
 def before_request():
+    g.session = scoped_session(sessionmaker(bind=engine))
+
     user_id = login_session.get('user_id')
     if user_id:
-        g.current_user = session.query(User).filter(User.id == user_id).first()
+        g.current_user = g.session.query(User).filter(User.id == user_id).first()
     else:
         g.current_user = None
+
+@app.teardown_request
+def remove_session(ex=None):
+    g.session.remove()
 
 
 from catalog_controllers import *

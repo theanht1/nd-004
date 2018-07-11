@@ -2,7 +2,7 @@
     <nav>
         <div class="nav-wrapper">
             <a href="/" class="brand-logo">Catalog App</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <ul id="nav-mobile" class="right">
                 {% if g.get('current_user') %}
                     <li><a id="logout">Logout</a></li>
                 {% else %}
@@ -16,7 +16,6 @@
 <script>
 (function() {
     var logoutEl = $('#logout')[0]
-    console.log(logoutEl)
     if (logoutEl) {
         logoutEl.addEventListener('click', function() {
             $.ajax({
@@ -26,7 +25,20 @@
                 contentType: 'application/octet-stream; charset=utf-8',
                 success: function(result) {
                     window.location.reload();
-                }});
+                },
+                error: function(err) {
+                    if (err.responseText.length > 0) {
+                        var error = JSON.parse(err.responseText);
+                        if (error && error.error) {
+                            M.toast({
+                                html: error.error,
+                                classes: 'flash-error',
+                                displayLength: 5000,
+                            });
+                        }
+                    }
+                },
+            });
         });
     }
 })();

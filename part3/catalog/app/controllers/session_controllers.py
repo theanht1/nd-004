@@ -1,4 +1,4 @@
-from flask import render_template, request, make_response
+from flask import render_template, request, make_response, g
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
@@ -8,7 +8,6 @@ import string
 import json
 import requests
 from app import app
-from . import session
 from app.models import User
 from app.utils import render_json, render_json_error
 
@@ -85,11 +84,11 @@ def gconnect():
 
     data = answer.json()
 
-    user = session.query(User).filter(User.email == data['email']).first()
+    user = g.session.query(User).filter(User.email == data['email']).first()
     if not user:
         user = User(name=data['name'], email=data['email'], picture=data['picture'])
-        session.add(user)
-        session.commit()
+        g.session.add(user)
+        g.session.commit()
 
     login_session['user_id'] = user.id
     return render_json({ 'message': 'Successfully login' })
@@ -105,10 +104,7 @@ def gdisconnect():
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['user_id']
-        return render_json({ 'message': 'Successfully disconnected.' })
-    else:
-        return render_json_error('Failed to revoke token for given user.', 400)
+    del login_session['access_token']
+    del login_session['gplus_id']
+    del login_session['user_id']
+    return render_json({ 'message': 'Successfully disconnected.' })

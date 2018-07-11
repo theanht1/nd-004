@@ -1,10 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from flask import g
 from . import Base
 from user import User
 from catalog import Catalog
-from app.controllers import session
 
 class CatalogItem(Base):
 
@@ -31,11 +30,13 @@ class CatalogItem(Base):
 
     @classmethod
     def get_by_id(cls, id):
-        return session.query(cls).filter(cls.id == id).first()
+        return g.session.query(cls).filter(cls.id == id).first()
 
     @classmethod
     def get_by_catalog(cls, catalog_id):
-        return session.query(cls).filter(cls.catalog_id == catalog_id).all()
+        return g.session.query(cls) \
+                .filter(cls.catalog_id == catalog_id) \
+                .order_by(cls.name).all()
 
     def is_owned_by(self, user):
         return user and user.id == self.user_id

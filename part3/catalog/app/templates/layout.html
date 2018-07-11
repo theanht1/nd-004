@@ -38,8 +38,8 @@
                 $('select').formSelect();
 
                 {% autoescape false %}
-                var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) }};
-                var info_messages = {{ get_flashed_messages(False, ['info', 'message']) }};
+                var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) | tojson }};
+                var info_messages = {{ get_flashed_messages(False, ['info', 'message']) | tojson}};
                 {% endautoescape %}
                 for (var i = 0; i < error_messages.length; i++) {
                     M.toast({

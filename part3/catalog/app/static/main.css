@@ -1,3 +1,7 @@
+nav {
+    background-color: #80b0fc;
+}
+
 .header .brand-logo {
     margin-left: 20px
 }
@@ -7,15 +11,24 @@
 }
 
 .flash-error {
-    color: red;
-    background-color: #888;
+    color: #fff;
+    background-color: red;
 }
 
 .flash-info {
+    background-color: green;
 }
 
 .content {
     max-width: 70%;
     margin: 0px auto;
     padding: 50px 0px;
+}
+
+.category-pane {
+    border-right: 1px solid #888;
+}
+
+.items-pane {
+    margin-top: 15px;
 }
