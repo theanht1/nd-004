@@ -19,7 +19,6 @@ class Catalog(Base):
         return {
             'id': self.id,
             'name': self.name,
-            'user_id': self.user_id,
         }
 
     @classmethod

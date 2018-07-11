@@ -25,7 +25,7 @@ class CatalogItem(Base):
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'catalog': self.catalog,
+            'catalog': self.catalog.serialize,
         }
 
     @classmethod

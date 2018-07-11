@@ -1,7 +1,7 @@
 from flask import g, render_template, request, redirect, flash, url_for
 from app import app
 from app.models import Catalog, CatalogItem
-from app.utils import render_json
+from app.utils import render_json, render_json_error
 
 
 @app.route('/catalogs/items/new/', methods=['GET', 'POST'])
@@ -39,6 +39,14 @@ def get_item(item_id):
     else:
         flash('Item not found', 'error')
         return redirect(url_for('home_page'))
+
+@app.route('/catalogs/items/<int:item_id>/JSON')
+def get_item_JSON(item_id):
+    item = CatalogItem.get_by_id(item_id)
+    if item:
+        return render_json(item.serialize)
+    else:
+        return render_json_error('Item not found')
 
 
 @app.route('/catalogs/items/<int:item_id>/edit', methods=['GET', 'POST'])
