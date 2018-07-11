@@ -10,14 +10,20 @@
         <div class="col s3">
             <ul>
                 {% for catalog in catalogs %}
-                    <li>{{catalog.name}}</li>
+                    <li>
+                        <a href="{{url_for('catalog_items', catalog_id=catalog.id)}}">
+                            {{catalog.name}}
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="col s9">
             <ul>
                 {% for item in items %}
-                    <li>{{item.catalog.name}} {{item.name}}</li>
+                    <li>{{item.catalog.name}} <a href="{{url_for('get_item', item_id=item.id)}}">
+                            {{item.name}}
+                        </a></li>
                 {% endfor %}
             </ul>
         </div>

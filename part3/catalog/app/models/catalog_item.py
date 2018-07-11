@@ -33,5 +33,9 @@ class CatalogItem(Base):
     def get_by_id(cls, id):
         return session.query(cls).filter(cls.id == id).first()
 
+    @classmethod
+    def get_by_catalog(cls, catalog_id):
+        return session.query(cls).filter(cls.catalog_id == catalog_id).all()
+
     def is_owned_by(self, user):
         return user and user.id == self.user_id

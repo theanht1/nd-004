@@ -7,6 +7,14 @@ from . import session
 
 @app.route('/')
 def home_page():
-    catalogs = session.query(Catalog).order_by(Catalog.name).all()
+    catalogs = Catalog.get_all()
     items = session.query(CatalogItem).order_by(desc(CatalogItem.id)).limit(10).all()
     return render_template('index.html', catalogs=catalogs, items=items)
+
+
+@app.route('/catalogs/<int:catalog_id>/')
+def catalog_items(catalog_id):
+    catalogs = Catalog.get_all()
+    items = CatalogItem.get_by_catalog(catalog_id)
+    return render_template('index.html', catalogs=catalogs, items=items)
+

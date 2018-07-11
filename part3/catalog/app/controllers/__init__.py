@@ -19,6 +19,6 @@ def before_request():
         g.current_user = None
 
 
-from page_controllers import *
+from catalog_controllers import *
 from session_controllers import *
 from item_controllers import *

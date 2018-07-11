@@ -1,62 +1,62 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Catage project</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <title>Catage project</title>
 
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
-    </script>
-    <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+        </script>
+        <script src="//apis.google.com/js/platform.js?onload=start"> </script>
 
-  </head>
-  <body>
-    <div class="container">
-      {% include "components/header.html" %}
+    </head>
+    <body>
+        <div class="container">
+            {% include "components/header.html" %}
 
-      <div class="card">
-        <div class="main">
-          <div class="content">
-            {% block content %}
-            {% endblock %}
-          </div>
+            <div class="card">
+                <div class="main">
+                    <div class="content">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 
-    <script>
-      $(document).ready(function(){
-        $('select').formSelect();
+        <script>
+            $(document).ready(function(){
+                $('select').formSelect();
 
-        {% autoescape false %}
-        var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) }};
-        var info_messages = {{ get_flashed_messages(False, ['info', 'message']) }};
-        {% endautoescape %}
-        for (var i = 0; i < error_messages.length; i++) {
-          M.toast({
-            html: error_messages[i],
-            classes: 'flash-error',
-            displayLength: 5000,
-          });
-        }
+                {% autoescape false %}
+                var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) }};
+                var info_messages = {{ get_flashed_messages(False, ['info', 'message']) }};
+                {% endautoescape %}
+                for (var i = 0; i < error_messages.length; i++) {
+                    M.toast({
+                        html: error_messages[i],
+                        classes: 'flash-error',
+                        displayLength: 5000,
+                    });
+                }
 
-        for (var i = 0; i < info_messages.length; i++) {
-          M.toast({
-            html: info_messages[i],
-            classes: 'flash-info',
-            displayLength: 5000,
-          });
-        }
-      });
-    </script>
-  </body>
+                for (var i = 0; i < info_messages.length; i++) {
+                    M.toast({
+                        html: info_messages[i],
+                        classes: 'flash-info',
+                        displayLength: 5000,
+                    });
+                }
+            });
+        </script>
+    </body>
 </html>
