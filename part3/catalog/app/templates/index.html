@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% if g.current_user %}
+        <div>
+            <a class="waves-effect waves-light btn" href="{{url_for('add_new_item')}}">New item</a>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col s3">
+            <ul>
+                {% for catalog in catalogs %}
+                    <li>{{catalog.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col s9">
+            <ul>
+                {% for item in items %}
+                    <li>{{item.catalog.name}} {{item.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

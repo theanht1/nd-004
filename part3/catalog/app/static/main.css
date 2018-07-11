@@ -1,0 +1,21 @@
+.header .brand-logo {
+    margin-left: 20px
+}
+.main {
+    min-height: 80vh;
+    margin-top: 10px;
+}
+
+.flash-error {
+    color: red;
+    background-color: #888;
+}
+
+.flash-info {
+}
+
+.content {
+    max-width: 70%;
+    margin: 0px auto;
+    padding: 50px 0px;
+}

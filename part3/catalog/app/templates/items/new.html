@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h4>Add New Item</h4>
+  <form class="col s12" action="{{url_for('add_new_item')}}" method="post">
+    {% include "items/_item_form.html" %}
+  </form>
+{% endblock %}

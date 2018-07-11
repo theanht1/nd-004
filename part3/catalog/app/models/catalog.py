@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from . import Base
 from user import User
+from app.controllers import session
 
 
 class Catalog(Base):
@@ -21,3 +22,6 @@ class Catalog(Base):
             'user_id': self.user_id,
         }
 
+    @classmethod
+    def get_all(cls):
+        return session.query(cls).order_by(cls.name).all()

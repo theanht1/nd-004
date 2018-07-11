@@ -22,11 +22,41 @@
     <div class="container">
       {% include "components/header.html" %}
 
-      <div class="main-content card">
-        {% block content %}
-        {% endblock %}
+      <div class="card">
+        <div class="main">
+          <div class="content">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+    <script>
+      $(document).ready(function(){
+        $('select').formSelect();
+
+        {% autoescape false %}
+        var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) }};
+        var info_messages = {{ get_flashed_messages(False, ['info', 'message']) }};
+        {% endautoescape %}
+        for (var i = 0; i < error_messages.length; i++) {
+          M.toast({
+            html: error_messages[i],
+            classes: 'flash-error',
+            displayLength: 5000,
+          });
+        }
+
+        for (var i = 0; i < info_messages.length; i++) {
+          M.toast({
+            html: info_messages[i],
+            classes: 'flash-info',
+            displayLength: 5000,
+          });
+        }
+      });
+    </script>
   </body>
 </html>
