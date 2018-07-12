@@ -1,0 +1,7 @@
+httplib2
+flask
+oauth2client
+sqlalchemy
+requests
+pytest
+coverage
