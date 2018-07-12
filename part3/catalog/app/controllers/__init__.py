@@ -1,25 +1,18 @@
-from sqlalchemy.orm import sessionmaker, scoped_session
+from flask import session, g
 
-from app import app
-from app.db import get_engine
-
-
-@app.before_request
-def before_request():
-    g.session = scoped_session(sessionmaker(bind=get_engine()))
-
-    user_id = login_session.get('user_id')
-    if user_id:
-        g.current_user = g.session.query(User).filter(User.id == user_id).first()
-    else:
-        g.current_user = None
+from app.models import User
+from app.db import db_session
 
 
-@app.teardown_request
-def remove_session(ex=None):
-    g.session.remove()
+def init_controller(app):
+    @app.before_request
+    def before_request():
+        user_id = session.get('user_id')
+        if user_id:
+            g.current_user = db_session.query(User).filter(User.id == user_id).first()
+        else:
+            g.current_user = None
 
-
-from catalog_controllers import *
-from session_controllers import *
-from item_controllers import *
+    @app.teardown_request
+    def remove_session(exception=None):
+        db_session.remove()

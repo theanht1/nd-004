@@ -1,8 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from flask import g
 
-from . import Base
+from app.db import Base, db_session
 
 
 class Catalog(Base):
@@ -29,7 +28,7 @@ class Catalog(Base):
 
         :return: [Catalog]
         """
-        return g.session.query(cls).order_by(cls.name).all()
+        return db_session.query(cls).order_by(cls.name).all()
 
     @classmethod
     def get_by_id(cls, catalog_id):
@@ -38,4 +37,4 @@ class Catalog(Base):
         :param catalog_id:
         :return: Catalog
         """
-        return g.session.query(cls).filter(cls.id == catalog_id).first()
+        return db_session.query(cls).filter(cls.id == catalog_id).first()

@@ -2,26 +2,26 @@ import json
 
 import httplib2
 import requests
-from flask import render_template, request, g
-from flask import session as login_session
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import flow_from_clientsecrets
+from flask import render_template, request, session, Blueprint, flash
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
-from app import app
 from app.models import User
 from app.utils import render_json, render_json_error
+from app.db import db_session
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
+bp = Blueprint('auth', __name__)
 
-@app.route('/login')
+
+@bp.route('/login')
 def login():
     """Route to login page"""
     return render_template('login.html')
 
 
-@app.route('/gconnect', methods=['POST'])
+@bp.route('/gconnect', methods=['POST'])
 def gconnect():
     """Use google one time token to validate user"""
     code = request.data
@@ -53,9 +53,6 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         return render_json_error("Token's client ID does not match app's.", 401)
 
-    # Store the access token in the session for later use.
-    login_session['access_token'] = credentials.access_token
-
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
@@ -63,26 +60,35 @@ def gconnect():
 
     data = answer.json()
 
-    user = g.session.query(User).filter(User.email == data['email']).first()
+    # Try to find user in our db
+    user = db_session.query(User).filter(User.email == data['email']).first()
+    # If user not in db, create new
     if not user:
         user = User(name=data['name'], email=data['email'], picture=data['picture'])
-        g.session.add(user)
-        g.session.commit()
+        db_session.add(user)
+        db_session.commit()
 
-    login_session['user_id'] = user.id
+    # Store the access token in the session for later use.
+    session['access_token'] = credentials.access_token
+    # Store user id for user authentication in next request
+    session['user_id'] = user.id
+
+    flash('Successfully login', 'info')
     return render_json({'message': 'Successfully login'})
 
 
-@app.route('/gdisconnect', methods=['POST'])
+@bp.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
     """Disconnect current user by revoke access_token"""
-    access_token = login_session.get('access_token')
+    access_token = session.get('access_token')
     if access_token is None:
         return render_json_error("Current user not connected.", 401)
 
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
-    h = httplib2.Http()
-    h.request(url, 'GET')
-    del login_session['access_token']
-    del login_session['user_id']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % session['access_token']
+    httplib2.Http().request(url, 'GET')
+
+    del session['access_token']
+    del session['user_id']
+
+    flash('Successfully logout', 'info')
     return render_json({'message': 'Successfully disconnected.'})

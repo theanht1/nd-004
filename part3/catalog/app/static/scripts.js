@@ -34,27 +34,31 @@ $(document).ready(function(){
 // Callback for google sign in
 function signInCallback(authResult) {
     if (authResult['code']) {
-        // Hide the sign-in button now that the user is authorized
-        $('#signinButton').attr('style', 'display: none');
         // Send the one-time-use code to the server
         $.ajax({
             type: 'POST',
-            url: '/gconnect?state={{STATE}}',
+            url: '/gconnect',
             processData: false,
             data: authResult['code'],
             contentType: 'application/octet-stream; charset=utf-8',
             success: function(result) {
-                // Handle or verify the server response if necessary.
                 if (result) {
-                    $('#result').html('Login Successful!</br>Redirecting...')
-                    setTimeout(function() {
-                        window.location.href = "/";
-                    }, 1000);
-                } else if (authResult['error']) {
-                    console.log('There was an error: ' + authResult['error']);
-                } else {
-                    $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                    window.location.href = "/";
                 }
-            }});
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                var error;
+                try {
+                    error = JSON.parse(xhr.responseText).error;
+                } catch (e) {
+                    error = 'Something went wrong';
+                }
+                M.toast({
+                    html: error,
+                    classes: 'flash-error',
+                    displayLength: 5000,
+                });
+            }
+        });
     }
 }

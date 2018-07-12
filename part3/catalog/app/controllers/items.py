@@ -1,16 +1,17 @@
-from flask import g, render_template, request, redirect, flash, url_for
-from app import app
+from flask import render_template, request, redirect, flash, url_for, g, Blueprint
+
 from app.models import Catalog, CatalogItem
 from app.utils import render_json, render_json_error, convert_item_fields
+from app.db import db_session
+from app.utils.decorators import login_required, item_required, item_owner_required
+
+bp = Blueprint('item', __name__)
 
 
-@app.route('/catalogs/items/new/', methods=['GET', 'POST'])
+@bp.route('/catalogs/items/new/', methods=['GET', 'POST'])
+@login_required
 def add_new_item():
     """Route to new item page + create item"""
-    if not g.current_user:
-        flash('User not authorized', 'error')
-        return redirect(url_for('home_page'))
-
     catalogs = Catalog.get_all()
 
     # GET request
@@ -24,10 +25,10 @@ def add_new_item():
     if name and description and catalog_id:
         item = CatalogItem(name=name, description=description,
                            catalog_id=catalog_id, user_id=g.current_user.id)
-        g.session.add(item)
-        g.session.commit()
+        db_session.add(item)
+        db_session.commit()
         flash('Item %s is created' % item.name, 'info')
-        return redirect(url_for('get_item', item_id=item.id))
+        return redirect(url_for('item.get_item', item_id=item.id))
 
     else:
         flash('Name, description and catalog are required', 'warning')
@@ -35,18 +36,14 @@ def add_new_item():
                                description=description, catalogs=catalogs)
 
 
-@app.route('/catalogs/items/<int:item_id>/')
-def get_item(item_id):
+@bp.route('/catalogs/items/<int:item_id>/')
+@item_required
+def get_item(item_id, item):
     """Route to item detail page"""
-    item = CatalogItem.get_by_id(item_id)
-    if not item:
-        flash('Item not found', 'error')
-        return redirect(url_for('home_page'))
-
     return render_template('items/show.html', item=item)
 
 
-@app.route('/catalogs/items/<int:item_id>/JSON')
+@bp.route('/catalogs/items/<int:item_id>/JSON')
 def get_item_json(item_id):
     """Render JSON for item"""
     item = CatalogItem.get_by_id(item_id)
@@ -56,14 +53,12 @@ def get_item_json(item_id):
     return render_json(item.serialize)
 
 
-@app.route('/catalogs/items/<int:item_id>/edit', methods=['GET', 'POST'])
-def edit_item(item_id):
+@bp.route('/catalogs/items/<int:item_id>/edit', methods=['GET', 'POST'])
+@login_required
+@item_required
+@item_owner_required
+def edit_item(item_id, item):
     """Route to item edit form + update item"""
-    item = CatalogItem.get_by_id(item_id)
-    if not (item and item.is_owned_by(g.current_user)):
-        flash('Item not found', 'error')
-        return redirect(url_for('home_page'))
-
     catalogs = Catalog.get_all()
     # GET request
     if request.method == 'GET':
@@ -79,10 +74,10 @@ def edit_item(item_id):
         item.name = name
         item.description = description
         item.catalog_id = catalog_id
-        g.session.add(item)
-        g.session.commit()
+        db_session.add(item)
+        db_session.commit()
         flash('Item %s is updated' % item.name, 'info')
-        return redirect(url_for('get_item', item_id=item.id))
+        return redirect(url_for('item.get_item', item_id=item.id))
 
     else:
         flash('Name, description and catalog are required', 'warning')
@@ -90,21 +85,19 @@ def edit_item(item_id):
                                catalog_id=catalog_id, description=description)
 
 
-@app.route('/catalogs/items/<int:item_id>/delete', methods=['GET', 'POST'])
-def delete_item(item_id):
+@bp.route('/catalogs/items/<int:item_id>/delete', methods=['GET', 'POST'])
+@login_required
+@item_required
+@item_owner_required
+def delete_item(item_id, item):
     """Route to item's delete page + delete item"""
-    item = CatalogItem.get_by_id(item_id)
-    if not (item and item.is_owned_by(g.current_user)):
-        flash('Item not found', 'error')
-        return redirect(url_for('home_page'))
-
     # GET request
     if request.method == 'GET':
         return render_template('items/delete.html', item=item)
 
     # POST request
     item_name = item.name
-    g.session.delete(item)
-    g.session.commit()
+    db_session.delete(item)
+    db_session.commit()
     flash('Item %s is removed' % item_name, 'info')
-    return redirect(url_for('home_page'))
+    return redirect(url_for('catalog.home_page'))

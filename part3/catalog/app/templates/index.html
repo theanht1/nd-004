@@ -3,7 +3,7 @@
 {% block content %}
     {% if g.current_user %}
         <div style="margin-bottom: 20px">
-            <a class="waves-effect waves-light btn-small" href="{{url_for('add_new_item')}}">New item</a>
+            <a class="waves-effect waves-light btn-small" href="{{url_for('item.add_new_item')}}">New item</a>
         </div>
     {% endif %}
     <div class="row">
@@ -13,7 +13,7 @@
                     <h4>Categories</h4>
                 </div>
                 {% for catalog in catalogs %}
-                    <a class="collection-item" href="{{url_for('catalog_items', catalog_id=catalog.id)}}">
+                    <a class="collection-item" href="{{url_for('catalog.catalog_items', catalog_id=catalog.id)}}">
                         {{catalog.name}}
                     </a>
                 {% endfor %}
@@ -27,7 +27,7 @@
                     </div>
 
                     {% for item in items %}
-                        <a class="collection-item" href="{{url_for('get_item', item_id=item.id)}}">
+                        <a class="collection-item" href="{{url_for('item.get_item', item_id=item.id)}}">
                             {{item.name}} ({{item.catalog.name}})</a>
 
                     {% endfor %}
@@ -39,7 +39,7 @@
                     </div>
 
                     {% for item in items %}
-                        <a class="collection-item" href="{{url_for('get_item', item_id=item.id)}}">
+                        <a class="collection-item" href="{{url_for('item.get_item', item_id=item.id)}}">
                             {{item.name}}</a>
 
                     {% endfor %}

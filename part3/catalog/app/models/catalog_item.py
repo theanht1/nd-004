@@ -1,7 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, UniqueConstraint
+from sqlalchemy import Column, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.orm import relationship
-from flask import g
-from . import Base
+
+from app.db import Base, db_session
 
 
 class CatalogItem(Base):
@@ -35,7 +35,7 @@ class CatalogItem(Base):
         :param item_id:
         :return: CatalogItem
         """
-        return g.session.query(cls).filter(cls.id == item_id).first()
+        return db_session.query(cls).filter(cls.id == item_id).first()
 
     def is_owned_by(self, user):
         """Determine if a user is the owner of this item
