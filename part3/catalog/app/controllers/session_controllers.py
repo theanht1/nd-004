@@ -73,9 +73,9 @@ def gconnect():
     return render_json({'message': 'Successfully login'})
 
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+    """Disconnect current user by revoke access_token"""
     access_token = login_session.get('access_token')
     if access_token is None:
         return render_json_error("Current user not connected.", 401)

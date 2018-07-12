@@ -13,8 +13,8 @@ def init_db():
 
 
 def create_session():
-    DBSession = sessionmaker(bind=get_engine())
-    return DBSession()
+    db_session = sessionmaker(bind=get_engine())
+    return db_session()
 
 
 def seed():
