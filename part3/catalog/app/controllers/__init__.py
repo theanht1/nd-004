@@ -1,12 +1,8 @@
-from flask import g
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from app.db import get_engine
 
 from app import app
-from flask import g
-from flask import session as login_session
-from app.models import User
+from app.db import get_engine
+
 
 @app.before_request
 def before_request():
@@ -17,6 +13,7 @@ def before_request():
         g.current_user = g.session.query(User).filter(User.id == user_id).first()
     else:
         g.current_user = None
+
 
 @app.teardown_request
 def remove_session(ex=None):

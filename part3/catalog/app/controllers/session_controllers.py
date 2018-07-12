@@ -1,12 +1,12 @@
-from flask import render_template, request, make_response, g
-from flask import session as login_session
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-import httplib2
-import random
-import string
 import json
+
+import httplib2
 import requests
+from flask import render_template, request, g
+from flask import session as login_session
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets
+
 from app import app
 from app.models import User
 from app.utils import render_json, render_json_error
@@ -14,36 +14,16 @@ from app.utils import render_json, render_json_error
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 
-## TODO: Refactor these shits
 
 @app.route('/login')
 def login():
     """Route to login page"""
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in xrange(32))
-    login_session['state'] = state
-
-    return render_template('login.html', STATE=state)
+    return render_template('login.html')
 
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    """Use google one time token to validate user
-
-    [description]
-
-    Decorators:
-        app.route
-
-    Returns:
-        [type] -- [description]
-    """
-    # Validate state token
-    # if request.args.get('state') != login_session['state']:
-    #     response = make_response(json.dumps('Invalid state parameter.'), 401)
-    #     response.headers['Content-Type'] = 'application/json'
-    #     return response
-    # Obtain authorization code
+    """Use google one time token to validate user"""
     code = request.data
 
     try:
@@ -75,7 +55,6 @@ def gconnect():
 
     # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
-    login_session['gplus_id'] = gplus_id
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -91,7 +70,7 @@ def gconnect():
         g.session.commit()
 
     login_session['user_id'] = user.id
-    return render_json({ 'message': 'Successfully login' })
+    return render_json({'message': 'Successfully login'})
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
@@ -103,8 +82,7 @@ def gdisconnect():
 
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
     h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
+    h.request(url, 'GET')
     del login_session['access_token']
-    del login_session['gplus_id']
     del login_session['user_id']
-    return render_json({ 'message': 'Successfully disconnected.' })
+    return render_json({'message': 'Successfully disconnected.'})

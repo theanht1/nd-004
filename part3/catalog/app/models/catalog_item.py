@@ -2,8 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, UniqueCons
 from sqlalchemy.orm import relationship
 from flask import g
 from . import Base
-from user import User
-from catalog import Catalog
+
 
 class CatalogItem(Base):
 
@@ -14,13 +13,14 @@ class CatalogItem(Base):
     description = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     catalog_id = Column(Integer, ForeignKey('catalogs.id'), nullable=False)
-    user = relationship(User)
-    catalog = relationship(Catalog)
+    user = relationship('User')
+    catalog = relationship('Catalog')
 
     UniqueConstraint('catalog_id', 'name')
 
     @property
     def serialize(self):
+        """Arrange object data to python type dictionary"""
         return {
             'id': self.id,
             'name': self.name,
@@ -29,14 +29,18 @@ class CatalogItem(Base):
         }
 
     @classmethod
-    def get_by_id(cls, id):
-        return g.session.query(cls).filter(cls.id == id).first()
+    def get_by_id(cls, item_id):
+        """Get a item by its id
 
-    @classmethod
-    def get_by_catalog(cls, catalog_id):
-        return g.session.query(cls) \
-                .filter(cls.catalog_id == catalog_id) \
-                .order_by(cls.name).all()
+        :param item_id:
+        :return: CatalogItem
+        """
+        return g.session.query(cls).filter(cls.id == item_id).first()
 
     def is_owned_by(self, user):
+        """Determine if a user is the owner of this item
+
+        :param user:
+        :return: bool
+        """
         return user and user.id == self.user_id

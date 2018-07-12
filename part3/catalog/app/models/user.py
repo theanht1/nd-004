@@ -1,8 +1,10 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Integer, String
+
 from . import Base
 
 
 class User(Base):
+
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
@@ -12,6 +14,7 @@ class User(Base):
 
     @property
     def serialize(self):
+        """Arrange object data to python type dictionary"""
         return {
             'id': self.id,
             'email': self.email,

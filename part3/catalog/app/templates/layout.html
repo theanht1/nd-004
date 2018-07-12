@@ -32,11 +32,10 @@
             </div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+        <script src="{{url_for('static', filename='scripts.js')}}"></script>
 
         <script>
-            $(document).ready(function(){
-                $('select').formSelect();
-
+            $('document').ready(function() {
                 {% autoescape false %}
                 var error_messages = {{ get_flashed_messages(False, ['error', 'warning']) | tojson }};
                 var info_messages = {{ get_flashed_messages(False, ['info', 'message']) | tojson}};
@@ -56,7 +55,7 @@
                         displayLength: 5000,
                     });
                 }
-            });
+            })
         </script>
     </body>
 </html>
