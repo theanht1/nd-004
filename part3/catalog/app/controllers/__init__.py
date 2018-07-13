@@ -10,7 +10,8 @@ def init_controller(app):
         user_id = session.get('user_id')
         if user_id:
             g.current_user = db_session.query(User).filter(User.id == user_id).first()
-        else:
+
+        if not hasattr(g, 'current_user'):
             g.current_user = None
 
     @app.teardown_request

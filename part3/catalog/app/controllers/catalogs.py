@@ -37,5 +37,5 @@ def catalog_items(catalog_id):
 @bp.route('/catalogs/<int:catalog_id>/items/JSON/')
 def catalog_items_json(catalog_id):
     """Render JSON for catalog's items"""
-    items = CatalogItem.get_by_catalog(catalog_id)
+    items = db_session.query(CatalogItem).filter(CatalogItem.catalog_id == catalog_id)
     return render_json([i.serialize for i in items])

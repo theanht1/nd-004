@@ -9,3 +9,13 @@
 
 * Start server : `python -m flask run`
 * App now can be accessed in : `localhost:5000`
+
+### Testing
+
+* Run test `PYTHONPATH=./ pytest -v`
+* Coverage
+```
+coverage run -m pytest
+coverage report
+coverage html
+```

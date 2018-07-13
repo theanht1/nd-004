@@ -44,12 +44,9 @@ def get_item(item_id, item):
 
 
 @bp.route('/<int:item_id>/JSON')
-def get_item_json(item_id):
+@item_required
+def get_item_json(item_id, item):
     """Render JSON for item"""
-    item = CatalogItem.get_by_id(item_id)
-    if not item:
-        return render_json_error('Item not found')
-
     return render_json(item.serialize)
 
 
