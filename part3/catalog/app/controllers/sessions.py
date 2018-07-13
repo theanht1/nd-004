@@ -38,16 +38,10 @@ def gconnect():
     access_token = credentials.access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
-    h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    result = json.loads(httplib2.Http().request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         return render_json_error(result.get('error'), 500)
-
-    # Verify that the access token is used for the intended user.
-    gplus_id = credentials.id_token['sub']
-    if result['user_id'] != gplus_id:
-        return render_json_error("Token's user ID doesn't match given user ID.", 401)
 
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:

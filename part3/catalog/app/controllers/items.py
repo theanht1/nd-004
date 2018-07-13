@@ -5,10 +5,10 @@ from app.utils import render_json, render_json_error, convert_item_fields
 from app.db import db_session
 from app.utils.decorators import login_required, item_required, item_owner_required
 
-bp = Blueprint('item', __name__)
+bp = Blueprint('item', __name__, url_prefix='/catalogs/items')
 
 
-@bp.route('/catalogs/items/new/', methods=['GET', 'POST'])
+@bp.route('/new/', methods=['GET', 'POST'])
 @login_required
 def add_new_item():
     """Route to new item page + create item"""
@@ -36,14 +36,14 @@ def add_new_item():
                                description=description, catalogs=catalogs)
 
 
-@bp.route('/catalogs/items/<int:item_id>/')
+@bp.route('/<int:item_id>/')
 @item_required
 def get_item(item_id, item):
     """Route to item detail page"""
     return render_template('items/show.html', item=item)
 
 
-@bp.route('/catalogs/items/<int:item_id>/JSON')
+@bp.route('/<int:item_id>/JSON')
 def get_item_json(item_id):
     """Render JSON for item"""
     item = CatalogItem.get_by_id(item_id)
@@ -53,7 +53,7 @@ def get_item_json(item_id):
     return render_json(item.serialize)
 
 
-@bp.route('/catalogs/items/<int:item_id>/edit', methods=['GET', 'POST'])
+@bp.route('/<int:item_id>/edit', methods=['GET', 'POST'])
 @login_required
 @item_required
 @item_owner_required
@@ -85,7 +85,7 @@ def edit_item(item_id, item):
                                catalog_id=catalog_id, description=description)
 
 
-@bp.route('/catalogs/items/<int:item_id>/delete', methods=['GET', 'POST'])
+@bp.route('/<int:item_id>/delete', methods=['GET', 'POST'])
 @login_required
 @item_required
 @item_owner_required

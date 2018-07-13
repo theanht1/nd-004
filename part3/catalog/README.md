@@ -7,5 +7,5 @@
 
 ### Running
 
-* Start server `python application.py`
-* App now can be accessed in `localhost:8000`
+* Start server : `python -m flask run`
+* App now can be accessed in : `localhost:5000`
