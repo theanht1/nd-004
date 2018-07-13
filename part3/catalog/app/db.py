@@ -10,9 +10,9 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 
-def init_db():
+def init_db(catalog_app):
     import app.models
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=catalog_app.engine)
 
 
 def seed():
