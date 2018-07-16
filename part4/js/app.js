@@ -1,65 +1,59 @@
-const FOUR_SQUARE_CLIENT_ID = 'VGRAORO20ED3QYD0XIICZ5YFSWKAQBNMV1Y3CXD1PUQ2TTW5';
-const FOUR_SQUARE_URL = 'https://api.foursquare.com/v2/venues';
-const FOUR_SQUARE_SECRET = 'NHJCKVBR12DGT3M2CKRS4DX53XTBUIOIW05ULFDDKLPEGMZC'
-const initialLocations = [
-    {title: 'Ho Chi Minh Mausoleum', location: {lat: 21.0313647, lng: 105.8371412}},
-    {title: 'Temple Of Literature', location: {lat: 21.0296114, lng: 105.8358889}},
-    {title: 'Hanoi University of Science and Technology', location: {lat: 21.0046184, lng: 105.8390342}},
-    {title: 'Ngoc Son Temple', location: {lat: 21.0250183, lng: 105.8445133}},
+const CATEGORIES = [
+    {value: 'restaurant', name: 'Restaurant'},
+    {value: 'cafe', name: 'Cafe'},
+    {value: 'school', name: 'School'},
 ];
 
+const RADIUSES = [
+    {value: 200, name: '200 m'},
+    {value: 500, name: '500 m'},
+    {value: 1000, name: '1 km'},
+    {value: 2000, name: '2 km'},
+];
 
-function getLocationDetail(marker) {
-    $.getJSON(FOUR_SQUARE_URL + '/query', {
-        ll: marker.position.lat() + ',' + marker.position.lng(),
-        client_id: FOUR_SQUARE_CLIENT_ID,
-        client_secret: FOUR_SQUARE_SECRET,
-        query: marker.title,
-        v: '20180323',
-        limit: 1,
-    }, function(query) {
-        console.log(query);
-        if (query.meta.code !== 200 || query.response.venues.length == 0) {
-            return {result: false};
-        }
+function makeInfoPanel(location) {
+    let html = '';
+    if (location.photos && location.photos.length > 0) {
+        html += '<img src="' + location.photos[0].getUrl({maxWidth: 200, maxHeight: 100}) + '">';
+    }
+    html += '<h5>' + location.name + '</h5>';
+    html += '<p>Address: ' + location.vicinity + '</p>';
 
-        const locationId = res.response.venues[0].id;
-        $.getJSON(FOUR_SQUARE_URL + '/detail', {
-            id: locationId,
-            client_id: FOUR_SQUARE_CLIENT_ID,
-            client_secret: FOUR_SQUARE_SECRET,
-            v: '20180323',
-        }, function(detail) {
-            console.log(detail)
-        });
-    });
+    if (location.rating) {
+        html += '<p>Rating: ' + location.rating + '</p>';
+    }
+
+    return '<div class="info-window">' + html + '</div>';
 }
-
-let map, bounds;
 
 const ViewModel = function() {
     // Use self to reference to ViewModel
     const self = this;
 
+    this.CATEGORIES = CATEGORIES;
+    this.RADIUSES = RADIUSES;
+
     // Text binding to input to find location
-    this.findCategory = ko.observable('');
-    this.findLocation = {},
+    this.findCategory = ko.observable(CATEGORIES[0].value);
+    this.findRadius = ko.observable(RADIUSES[0].value);
+    this.findLocation = {};
+
+    // Text to filter locations by name
+    this.filterText = ko.observable('');
 
     // Hold all markers of map
-    this.markers = [];
+    this.markers = ko.observableArray([]);
+    this.isLoadingLocations = ko.observable(false);
+    this.isShowMenu = ko.observable(true);
 
     // Show info window for a marker
     this.showInfoWindow = function (marker, infoWindow) {
         // Check if marker is opened
         if (marker !== infoWindow.marker) {
-            infoWindow.marker = marker;
 
-            console.log(marker);
+            infoWindow.setContent(makeInfoPanel(marker.locationInfo));
 
-            infoWindow.setContent('<div>' + marker.title + '</div>');
-            getLocationDetail(marker);
             infoWindow.open(map, marker);
-
         }
     };
 
@@ -70,63 +64,38 @@ const ViewModel = function() {
             center: {lat: 21.022736, lng: 105.8019441},
             zoom: 13,
         });
-        // Set info window for app
+
+        // Set google map api and services
         self.largeInfoWindow = new google.maps.InfoWindow();
         self.placeService = new google.maps.places.PlacesService(self.map);
         self.geocoder = new google.maps.Geocoder();
 
-        const options = {
-            // bounds: defaultBounds,
-            componentRestrictions: {country: 'vn'},
-            types: ['address'],
-            fields: ['geometry', 'place_id'],
-        };
-
+        // Init autocomplete input
         const locationInput = new google.maps.places.Autocomplete(
-            document.getElementById('findLocation'), options);
+            document.getElementById('findLocation'),
+            {
+                componentRestrictions: {country: 'vn'},
+                types: ['address'],
+                fields: ['geometry', 'place_id'],
+            }
+        );
 
         locationInput.addListener('place_changed', function() {
             const place = locationInput.getPlace();
-            // console.log(place, place.geometry)
             if (place && place.place_id) {
                 self.findLocation = place;
             }
         });
-        // // Create a bound map instance
-        // bounds = new google.maps.LatLngBounds();
-        //
-        // // Add locations list
-        // initialLocations.forEach(function(lc, index) {
-        //     // Create a new marker
-        //     const marker = new google.maps.Marker({
-        //         map: map,
-        //         position: lc.location,
-        //         title: lc.title,
-        //         animation: google.maps.Animation.BOUNCE,
-        //         id: index,
-        //     });
-        //
-        //     // Show marker on map
-        //     bounds.extend(marker.position);
-        //     self.markers.push(marker);
-        //     marker.addListener('click', function () {
-        //         self.showInfoWindow(marker, self.largeInfoWindow);
-        //     });
-        //     setTimeout(function() {
-        //         marker.setAnimation(null);
-        //     }, 1500);
-        // });
-        // // Set map scale to fit our markers
-        // map.fitBounds(bounds);
     };
 
 
+    // Create marker
     this.createMarker = function (location) {
         const marker = new google.maps.Marker({
             map: self.map,
             position: {
-                lat: location.geometry.lat(),
-                lng: location.geometry.lng(),
+                lat: location.geometry.location.lat(),
+                lng: location.geometry.location.lng(),
             },
             title: location.name,
             animation: google.maps.Animation.BOUNCE,
@@ -135,33 +104,63 @@ const ViewModel = function() {
         });
 
         // Show marker on map
-        bounds.extend(marker.position);
-        self.markers.push(marker);
+        self.bounds.extend(marker.position);
+        self.markers().push(marker);
         marker.addListener('click', function () {
             self.showInfoWindow(marker, self.largeInfoWindow);
         });
         setTimeout(function() {
             marker.setAnimation(null);
-        }, 1500);
+        }, 1000);
     };
 
     this.searchLocations = function () {
-        console.log(self.findCategory(), self.findLocation)
+        if (!self.findLocation || !self.findLocation.geometry) {
+            return window.alert('Please select a valid location');
+        }
         const lat = self.findLocation.geometry.location.lat();
         const lng = self.findLocation.geometry.location.lng();
         const location = new google.maps.LatLng({lat: lat, lng: lng});
 
+        self.isLoadingLocations(true);
         self.placeService.nearbySearch({
             location: location,
-            radius: 1000,
+            radius: self.findRadius(),
             type: self.findCategory(),
-        }, function(res) {
-            console.log(res);
+        }, function(locations) {
+            // Clear markers
+            self.markers().forEach(function (marker) {
+                marker.setMap(null);
+            });
+            self.markers([]);
+
+            // Add new markers
+            self.bounds = new google.maps.LatLngBounds();
+            locations.forEach(function (location) {
+                self.createMarker(location);
+            });
+            self.map.fitBounds(self.bounds);
+            self.filterText('');
+            self.isLoadingLocations(false);
+
         })
     };
 
+    // Set current place
+    this.changeCurrentPlace = function (marker) {
+        self.showInfoWindow(marker, self.largeInfoWindow);
+    };
+
+    this.toggleMenu = function () {
+        self.isShowMenu(!self.isShowMenu());
+        console.log(self.isShowMenu())
+    };
+
+    // Location filter by name
     this.filteredLocations = ko.computed(function () {
-        return self.markers.filter(function(marker) {
+        if (self.isLoadingLocations()) return [];
+
+        return self.markers().filter(function(marker) {
             if (marker.title.toLowerCase().includes(self.filterText().toLowerCase())) {
                 marker.setVisible(true);
                 return true;
@@ -171,6 +170,9 @@ const ViewModel = function() {
         })
     });
 
+    this.isShowFilterInput = ko.computed(function () {
+        return !self.isLoadingLocations() && self.markers().length > 0
+    });
     this.initMap();
 };
 
