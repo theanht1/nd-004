@@ -1,0 +1,14 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "Project for part 4 of Udacity Full-stack Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "theanht1k20@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "knockout": "^3.4.2"
+  }
+}

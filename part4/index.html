@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neighborhood map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="app" class="row">
+        <nav class="col s12 header">
+            <div class="nav-wrapper">
+                <a href="/" class="brand-logo">Neighborhood Map</a>
+            </div>
+        </nav>
+        <div class="col s3">
+            <div class="row">
+                <div class="input-field">
+                    <input id="findLocation" type="text" class="validate">
+                    <label for="findLocation">Select location</label>
+                </div>
+                <div class="input-field">
+                    <select data-bind="textInput: findCategory">
+                        <option value="restaurant">Restaurant</option>
+                        <option value="cafe">Cafe</option>
+                        <option value="school">School</option>
+                        <option value="neighborhood">Neighborhood</option>
+                    </select>
+                    <label>Category</label>
+                </div>
+                <a data-bind="click: searchLocations" class="waves-effect waves-light btn">Search</a>
+            </div>
+            <div>
+                <div data-bind="foreach: filteredLocations" class="collection">
+                    <a data-bind="text: title" class="collection-item"></a>
+                </div>
+            </div>
+        </div>
+        <div class="col s9" id="map">
+        </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script src="node_modules/knockout/build/output/knockout-latest.js"></script>
+    <script src="js/app.js"></script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyAGN1a3eDrnge6wAOv8A2ql8kmlsh6UZG0&callback=initApp"
+            onerror="mapError">
+    </script>
+</body>
+</html>
