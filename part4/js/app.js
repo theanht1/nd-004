@@ -1,9 +1,11 @@
+// Location categories
 const CATEGORIES = [
     {value: 'restaurant', name: 'Restaurant'},
     {value: 'cafe', name: 'Cafe'},
     {value: 'school', name: 'School'},
 ];
 
+// Radius options from a location
 const RADIUSES = [
     {value: 200, name: '200 m'},
     {value: 500, name: '500 m'},
@@ -11,10 +13,11 @@ const RADIUSES = [
     {value: 2000, name: '2 km'},
 ];
 
+// Create info for a location as a html string
 function makeInfoPanel(location) {
     let html = '';
     if (location.photos && location.photos.length > 0) {
-        html += '<img src="' + location.photos[0].getUrl({maxWidth: 200, maxHeight: 100}) + '">';
+        html += '<img src="' + location.photos[0].getUrl({maxWidth: 200, maxHeight: 100}) + '" height="100">';
     }
     html += '<h5>' + location.name + '</h5>';
     html += '<p>Address: ' + location.vicinity + '</p>';
@@ -26,6 +29,7 @@ function makeInfoPanel(location) {
     return '<div class="info-window">' + html + '</div>';
 }
 
+// Main view model
 const ViewModel = function() {
     // Use self to reference to ViewModel
     const self = this;
@@ -79,6 +83,7 @@ const ViewModel = function() {
             }
         );
 
+        // Set event for autocomplete input to assign location's information
         locationInput.addListener('place_changed', function() {
             const place = locationInput.getPlace();
             if (place && place.place_id) {
@@ -113,7 +118,9 @@ const ViewModel = function() {
         }, 1000);
     };
 
+    // Perform searching to retrieve nearby places and show it to map
     this.searchLocations = function () {
+        // Make sure use select a valid location
         if (!self.findLocation || !self.findLocation.geometry) {
             return window.alert('Please select a valid location');
         }
@@ -122,6 +129,7 @@ const ViewModel = function() {
         const location = new google.maps.LatLng({lat: lat, lng: lng});
 
         self.isLoadingLocations(true);
+        // Get nearby places
         self.placeService.nearbySearch({
             location: location,
             radius: self.findRadius(),
@@ -154,6 +162,7 @@ const ViewModel = function() {
     this.filteredLocations = ko.computed(function () {
         if (self.isLoadingLocations()) return [];
 
+        // Filter location, setVisible for each one
         return self.markers().filter(function(marker) {
             if (marker.title.toLowerCase().includes(self.filterText().toLowerCase())) {
                 marker.setVisible(true);
@@ -164,6 +173,7 @@ const ViewModel = function() {
         })
     });
 
+    // Only show filter input when searching completed
     this.isShowFilterInput = ko.computed(function () {
         return !self.isLoadingLocations() && self.markers().length > 0
     });
