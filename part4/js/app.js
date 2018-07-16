@@ -44,7 +44,6 @@ const ViewModel = function() {
     // Hold all markers of map
     this.markers = ko.observableArray([]);
     this.isLoadingLocations = ko.observable(false);
-    this.isShowMenu = ko.observable(true);
 
     // Show info window for a marker
     this.showInfoWindow = function (marker, infoWindow) {
@@ -151,11 +150,6 @@ const ViewModel = function() {
         self.showInfoWindow(marker, self.largeInfoWindow);
     };
 
-    this.toggleMenu = function () {
-        self.isShowMenu(!self.isShowMenu());
-        console.log(self.isShowMenu())
-    };
-
     // Location filter by name
     this.filteredLocations = ko.computed(function () {
         if (self.isLoadingLocations()) return [];
@@ -176,14 +170,22 @@ const ViewModel = function() {
     this.initMap();
 };
 
+// Error handler for map js
 mapError = function googleError() {
     window.alert('Please refresh and try again. Google Maps did not load!');
 };
 
+// Function to initialize app
 function initApp() {
     ko.applyBindings(new ViewModel());
 }
 
+
+// Materialize stuffs
 $(document).ready(function(){
     $('select').formSelect();
+});
+
+$(document).ready(function(){
+    $('.side-nav').sidenav();
 });
