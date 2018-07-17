@@ -35,7 +35,7 @@ def get_user_info(id_token):
     params = {'id_token': id_token, 'alt': 'json'}
     result = requests.get(url, params=params)
 
-    print(result.content)
+    # print(result.content)
     if result.status_code != 200:
         return False
 

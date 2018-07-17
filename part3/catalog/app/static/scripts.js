@@ -35,30 +35,31 @@ $(document).ready(function(){
 function signInCallback(authResult) {
     if (authResult['code']) {
         // Send the one-time-use code to the server
-        $.ajax({
-            type: 'POST',
-            url: '/gconnect',
-            processData: false,
-            data: authResult['code'],
-            contentType: 'application/octet-stream; charset=utf-8',
-            success: function(result) {
-                if (result) {
-                    window.location.href = "/";
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                var error;
-                try {
-                    error = JSON.parse(xhr.responseText).error;
-                } catch (e) {
-                    error = 'Something went wrong';
-                }
-                M.toast({
-                    html: error,
-                    classes: 'flash-error',
-                    displayLength: 5000,
-                });
-            }
-        });
+        console.log(authResult)
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/gconnect',
+        //     processData: false,
+        //     data: authResult['code'],
+        //     contentType: 'application/octet-stream; charset=utf-8',
+        //     success: function(result) {
+        //         if (result) {
+        //             window.location.href = "/";
+        //         }
+        //     },
+        //     error: function(xhr, ajaxOptions, thrownError) {
+        //         var error;
+        //         try {
+        //             error = JSON.parse(xhr.responseText).error;
+        //         } catch (e) {
+        //             error = 'Something went wrong';
+        //         }
+        //         M.toast({
+        //             html: error,
+        //             classes: 'flash-error',
+        //             displayLength: 5000,
+        //         });
+        //     }
+        // });
     }
 }
