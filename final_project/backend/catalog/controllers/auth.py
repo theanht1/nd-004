@@ -1,58 +1,31 @@
-import json
-
-import httplib2
-import requests
 from flask import Blueprint, request
-from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 
 from catalog import db
 from catalog.models import User
-from catalog.utils.auth_helper import create_jwt_token
+from catalog.utils.auth_helper import create_jwt_token, get_user_info
 from catalog.utils.responses_helper import render_json_error, render_json
 
 bp = Blueprint('auth', __name__)
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
-
 
 @bp.route('/google-login', methods=['POST'])
 def google_login():
-    code = request.get_json()['code']
+    payload = request.get_json()
 
-    try:
-        # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
-        oauth_flow.redirect_uri = 'postmessage'
-        credentials = oauth_flow.step2_exchange(code)
-    except FlowExchangeError:
-        return render_json_error('Failed to get access token.', 401)
+    if not (payload and 'id_token' in payload):
+        return render_json_error('Id token is required', 400)
 
-    # Check that the access token is valid.
-    access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
-           % access_token)
-    result = json.loads(httplib2.Http().request(url, 'GET')[1])
-    # If there was an error in the access token info, abort.
-    if result.get('error') is not None:
-        return render_json_error(result.get('error'), 500)
+    id_token = payload['id_token']
 
-    # Verify that the access token is valid for this app.
-    if result['issued_to'] != CLIENT_ID:
-        return render_json_error("Token's client ID does not match app's.", 401)
-
-    # Get user info
-    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
-    params = {'access_token': credentials.access_token, 'alt': 'json'}
-    answer = requests.get(userinfo_url, params=params)
-
-    data = answer.json()
+    user_info = get_user_info(id_token)
+    if not user_info:
+        return render_json_error('Id token is not valid', 401)
 
     # Try to find user in our db
-    user = db.session.query(User).filter(User.email == data['email']).first()
+    user = db.session.query(User).filter(User.email == user_info['email']).first()
     # If user not in db, create new
     if not user:
-        user = User(name=data['name'], email=data['email'], picture=data['picture'])
+        user = User(name=user_info['name'], email=user_info['email'], picture=user_info['picture'])
         db.session.add(user)
         db.session.commit()
 

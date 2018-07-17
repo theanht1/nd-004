@@ -1,10 +1,10 @@
 flask
 sqlalchemy
 flask_sqlalchemy
+sqlalchemy-utils
 marshmallow
 mysql-python
 oauth2client
-httplib2
 requests
 pytest
 coverage
