@@ -3,6 +3,8 @@ from os import environ
 
 from catalog.db import db
 from config import production, test, development
+from catalog.controllers import auth
+from catalog.controllers import init_controller
 
 
 def create_app(cfg=None):
@@ -11,9 +13,8 @@ def create_app(cfg=None):
     load_config(app, cfg)
     db.init_app(app)
 
-    @app.route('/')
-    def hello_world():
-        return 'Hello World!'
+    init_controller(app)
+    app.register_blueprint(auth.bp)
 
     return app
 
