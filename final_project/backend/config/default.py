@@ -1,0 +1,7 @@
+from os import environ
+
+
+DEBUG = False
+SQLALCHEMY_DATABASE_ROOT = environ.get('DB_URI_ROOT')
+
+SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_ROOT + '/catalog'
