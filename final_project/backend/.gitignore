@@ -3,4 +3,5 @@ venv
 *.pyc
 .pytest_cache
 .env
-client_secrets.json
+.coverage
+htmlcov

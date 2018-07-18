@@ -4,6 +4,7 @@ from flask import url_for
 
 from catalog import db
 from catalog.models import Category, User, Item
+from catalog.utils.auth_helper import create_jwt_token
 
 ITEMS = [
     {
@@ -30,15 +31,30 @@ def seed_db():
     db.session.commit()
 
     categories_data = [
-        {'name': 'Skating'},
-        {'name': 'Hockey'},
+        {'name': 'Football'},
+        {'name': 'Tennis'},
     ]
 
     for categories in categories_data:
         new_category = Category(name=categories['name'])
         db.session.add(new_category)
-
     db.session.commit()
+
+    items_data = [
+        {'name': 'Ball', 'description': 'Football', 'category_id': 1},
+        {'name': 'Net', 'description': 'Football', 'category_id': 1},
+        {'name': 'Racket', 'description': 'Tennis', 'category_id': 2},
+        {'name': 'Tennis ball', 'description': 'Football', 'category_id': 2},
+    ]
+    for index, item in enumerate(items_data):
+        new_item = Item(name=item['name'], description=item['description'],
+                        category_id=item['category_id'], user_id=(index % 2 + 1))
+        db.session.add(new_item)
+    db.session.commit()
+
+
+def get_access_token(user):
+    return create_jwt_token(user)
 
 
 def create_items():

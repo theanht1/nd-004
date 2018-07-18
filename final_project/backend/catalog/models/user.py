@@ -28,4 +28,4 @@ class User(db.Model):
         :param user_id: int
         :return: a User or None
         """
-        return db.session.query(cls).filter(cls.id == user_id).first
+        return db.session.query(cls).filter(cls.id == user_id).first()

@@ -1,6 +1,9 @@
+from datetime import datetime, timedelta
+
 import jwt
 import requests
 from flask import current_app
+from jwt import DecodeError, ExpiredSignatureError
 
 from catalog.models import User
 
@@ -11,7 +14,11 @@ def create_jwt_token(user):
     :return: token string
     """
     secret = current_app.config.get('JWT_SECRET')
-    return jwt.encode({'user_id': user.id}, secret, algorithm='HS256')
+    payload = {
+        'user_id': user.id,
+        'exp': datetime.now() + timedelta(days=3),
+    }
+    return jwt.encode(payload, secret, algorithm='HS256')
 
 
 def get_user_from_token(token):
@@ -20,7 +27,11 @@ def get_user_from_token(token):
     :return: a User or None
     """
     secret = current_app.config.get('JWT_SECRET')
-    payload = jwt.decode(token, secret, algorithms=['HS256'])
+    try:
+        payload = jwt.decode(token, secret, algorithms=['HS256'])
+    except (DecodeError, ExpiredSignatureError):
+        return None
+
     if payload and payload['user_id']:
         return User.get_by_id(payload['user_id'])
     return None
@@ -35,7 +46,6 @@ def get_user_info(id_token):
     params = {'id_token': id_token, 'alt': 'json'}
     result = requests.get(url, params=params)
 
-    # print(result.content)
     if result.status_code != 200:
         return False
 
