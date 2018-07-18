@@ -4,15 +4,15 @@ from helpers import get_access_token
 
 
 def create_item(client, new_item=None, token=None):
-    return client.post('/items/', json=new_item, headers={'Authorization': token})
+    return client.post('/api/items/', json=new_item, headers={'Authorization': token})
 
 
 def edit_item(client, item_id, edit_info=None, token=None):
-    return client.patch('/items/%s/' % item_id, json=edit_info, headers={'Authorization': token})
+    return client.patch('/api/items/%s/' % item_id, json=edit_info, headers={'Authorization': token})
 
 
 def delete_item(client, item_id, token=None):
-    return client.delete('/items/%s/' % item_id, headers={'Authorization': token})
+    return client.delete('/api/items/%s/' % item_id, headers={'Authorization': token})
 
 
 class TestItem(object):
@@ -21,7 +21,7 @@ class TestItem(object):
             category = db.session.query(Category).first()
             category_items = category.items
 
-        response = client.get('/categories/%s/items/' % category.id)
+        response = client.get('/api/categories/%s/items/' % category.id)
         data = response.get_json()
 
         # It should response all items of this categories
@@ -35,7 +35,7 @@ class TestItem(object):
         with app.app_context():
             item = db.session.query(Item).first()
 
-        response = client.get('/items/%s/' % item.id)
+        response = client.get('/api/items/%s/' % item.id)
         data = response.get_json()
 
         # It should response item data
@@ -43,7 +43,7 @@ class TestItem(object):
         assert 'item' in data and data['item']['id'] == item.id
 
         # Case not found
-        response = client.get('/items/%s/' % 100)
+        response = client.get('/api/items/%s/' % 100)
         assert response.status_code == 404
 
     def test_create_item(self, client, app):

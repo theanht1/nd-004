@@ -48,7 +48,7 @@ def check_input_schema(schema):
             try:
                 payload_dump = schema.load(payload)
                 if payload_dump.errors:
-                    return render_json_error('errors', 400)
+                    return render_json_error(payload_dump.errors, 400)
 
                 g.payload = payload_dump.data
             except ValidationError as err:

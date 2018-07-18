@@ -4,7 +4,7 @@ from catalog import db
 from catalog.models import Category, Item
 from catalog.utils.responses_helper import render_json
 
-bp = Blueprint('category', __name__, url_prefix='/categories')
+bp = Blueprint('category', __name__, url_prefix='/api/categories')
 
 
 @bp.route('/')

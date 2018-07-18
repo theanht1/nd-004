@@ -6,10 +6,10 @@ from catalog.utils import auth_helper
 from catalog.utils.auth_helper import create_jwt_token
 from catalog.utils.responses_helper import render_json_error, render_json
 
-bp = Blueprint('auth', __name__)
+bp = Blueprint('auth', __name__, url_prefix='/api')
 
 
-@bp.route('/google-login', methods=['POST'])
+@bp.route('/google-login/', methods=['POST'])
 def google_login():
     payload = request.get_json()
 

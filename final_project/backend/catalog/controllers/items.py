@@ -1,12 +1,13 @@
-from flask import request, g, Blueprint
+from flask import g, Blueprint
 
 from catalog import db
 from catalog.models import Item
-from catalog.utils.decorators import login_required, item_required, item_owner_required, check_input_schema
-from catalog.utils.responses_helper import render_json
 from catalog.schemas.item_schema import ItemSchema
+from catalog.utils.decorators import login_required, item_required,\
+    item_owner_required, check_input_schema
+from catalog.utils.responses_helper import render_json, render_json_error
 
-bp = Blueprint('item', __name__, url_prefix='/items')
+bp = Blueprint('item', __name__, url_prefix='/api/items')
 itemSchema = ItemSchema()
 
 
@@ -16,7 +17,16 @@ itemSchema = ItemSchema()
 def create_item():
     """CREATE new item"""
     payload = g.get('payload')
-    name, description, category_id = payload['name'], payload['description'], payload['category_id']
+    name, description, category_id = (payload['name'], payload['description'],
+                                      payload['category_id'])
+
+    exist_item = db.session.query(Item) \
+        .filter(Item.name == name, Item.category_id == category_id)\
+        .first()
+
+    if exist_item is not None:
+        return render_json_error('Item\'s name existed in this category')
+
     item = Item(name=name, description=description,
                 category_id=category_id, user_id=g.current_user.id)
     db.session.add(item)
@@ -39,7 +49,17 @@ def get_item(item_id, item):
 def edit_item(item_id, item):
     """Edit an item"""
     payload = g.get('payload')
-    name, description, category_id = payload['name'], payload['description'], payload['category_id']
+    name, description, category_id = (payload['name'], payload['description'],
+                                      payload['category_id'])
+
+    exist_item = db.session.query(Item) \
+        .filter(Item.name == name,
+                Item.category_id == category_id,
+                Item.id != item_id) \
+        .first()
+
+    if exist_item is not None:
+        return render_json_error('Item\'s name existed in this category')
 
     item.name = name
     item.description = description

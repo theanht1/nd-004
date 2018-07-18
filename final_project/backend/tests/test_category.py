@@ -7,7 +7,7 @@ class TestCategory(object):
         with app.app_context():
             categories = db.session.query(Category).all()
 
-        response = client.get('/categories/')
+        response = client.get('/api/categories/')
         data = response.get_json()
 
         assert response.status_code == 200
