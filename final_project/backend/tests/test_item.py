@@ -16,6 +16,17 @@ def delete_item(client, item_id, token=None):
 
 
 class TestItem(object):
+    def test_latest_items(self, client, app):
+        with app.app_context():
+            items = db.session.query(Item).order_by(Item.created_at.desc())\
+                .limit(2).all()
+
+        response = client.get('/api/items/latest/?limit=2')
+        data = response.get_json()
+        assert response.status_code == 200
+        assert 'items' in data and len(data['items']) == len(items)
+        assert data['items'][0]['id'] == items[0].id
+
     def test_get_category_items(self, client, app):
         with app.app_context():
             category = db.session.query(Category).first()
@@ -93,6 +104,10 @@ class TestItem(object):
         edit_info = {'name': 'edited item', 'description': 'desc', 'category_id': 1}
         with app.app_context():
             item = db.session.query(Item).first()
+            other_item = db.session.query(Item)\
+                .filter(Item.id != item.id,
+                        Item.category_id == item.category_id).first()
+
             auth_user = item.user
             auth_token = get_access_token(auth_user)
             unauth_user = db.session.query(User).filter(User.id != auth_user.id).first()
@@ -114,6 +129,11 @@ class TestItem(object):
         with app.app_context():
             db_item = Item.get_by_id(item.id)
         assert db_item.name == edit_info['name']
+
+        # Case duplicate item
+        edit_info['name'] = other_item.name
+        response = edit_item(client, item.id, edit_info, auth_token)
+        assert response.status_code == 400
 
         # Case invalid info
         edit_info['name'] = '  '
