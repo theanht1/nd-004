@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   AppBar, Button, Toolbar, Typography,
 } from '@material-ui/core/es/index';
-import { logout } from '../../actions/userActions';
+import { logout } from '../../actions/authActions';
 
 
 const Header = (props) => {
@@ -17,7 +17,7 @@ const Header = (props) => {
         <Toolbar className="flex space-between">
           <Button component={Link} to="/" color="inherit">
             <Typography variant="title" color="inherit">
-              Sport items catalog
+              Developer catalog
             </Typography>
           </Button>
           <div>

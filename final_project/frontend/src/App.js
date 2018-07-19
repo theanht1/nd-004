@@ -4,8 +4,8 @@ import { Route, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Card, Snackbar } from '@material-ui/core/es/index';
 import Header from './components/header';
-import Home from './components/home';
-import Login from './components/login';
+import Home from './pages/home';
+import Login from './pages/login';
 import { closeSnackbar } from './actions/appActions';
 
 const App = (props) => {

@@ -7,7 +7,7 @@ import axios from 'axios';
 import store, { history } from './store';
 import './style.css';
 import App from './App';
-import { AUTHORIZATION_COOKIE_NAME, getCurrentUser } from './actions/userActions';
+import { AUTHORIZATION_COOKIE_NAME, getCurrentUser } from './actions/authActions';
 
 // TODO: Config backend host
 axios.defaults.baseURL = 'http://localhost:5000/api';

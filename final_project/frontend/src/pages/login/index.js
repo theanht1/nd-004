@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, CircularProgress, Typography } from '@material-ui/core/es/index';
-import { ggLogin } from '../../actions/userActions';
+import { ggLogin } from '../../actions/authActions';
 
 const styles = {
   loginSession: {
@@ -48,7 +48,7 @@ const mapStateToProps = ({ auth: { loginLoading } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onGoogleLogin: () => { dispatch(ggLogin()); },
+  onGoogleLogin: ({ id_token }) => { dispatch(ggLogin({ id_token })); },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
