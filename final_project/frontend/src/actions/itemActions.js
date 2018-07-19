@@ -25,6 +25,29 @@ export const createItem = ({ name, description, category_id }) => (dispatch) => 
   });
 };
 
+export const editItem = ({
+  id, name, description, category_id,
+}) => (dispatch) => {
+  dispatch({
+    type: SET_ITEM_SUBMITTING,
+    payload: true,
+  });
+
+  return performRequest({
+    dispatch,
+    requestPromise: axios.patch(`/items/${id}/`, { name, description, category_id }),
+    onData: () => {
+      dispatch(push(`/items/${id}`));
+    },
+    postUpdate: () => {
+      dispatch({
+        type: SET_ITEM_SUBMITTING,
+        payload: true,
+      });
+    },
+  });
+};
+
 export const getItem = ({ item_id }) => (dispatch) => {
   dispatch({
     type: SET_ITEM_LOADING,

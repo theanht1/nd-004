@@ -10,6 +10,7 @@ import { closeSnackbar } from './actions/appActions';
 import ItemsPage from './pages/itemsPage';
 import ItemNew from './pages/itemNew';
 import ItemDetail from './pages/itemDetail';
+import ItemEdit from './pages/itemEdit';
 
 const App = (props) => {
   const {
@@ -33,6 +34,7 @@ const App = (props) => {
             )}
           />
           <Route exact path="/items/:item_id/" component={ItemDetail} />
+          <Route exact path="/items/:item_id/edit" component={ItemEdit} />
         </Card>
         <Snackbar
           anchorOrigin={{

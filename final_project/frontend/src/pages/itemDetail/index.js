@@ -57,6 +57,8 @@ ItemDetail.propTypes = {
   onGetItem: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
   itemLoading: PropTypes.bool.isRequired,
+  currentUser: PropTypes.object.isRequired,
+  currentUserLoading: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };

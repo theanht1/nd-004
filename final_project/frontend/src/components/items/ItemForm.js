@@ -22,6 +22,17 @@ class ItemForm extends React.Component {
     onGetCategories();
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {item} = nextProps;
+    if (item.id) {
+      this.setState({
+        name: item.name,
+        description: item.description,
+        category_id: item.category_id,
+      });
+    }
+  }
+
   handlerChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -90,6 +101,11 @@ ItemForm.propTypes = {
   categories: PropTypes.array.isRequired,
   categoriesLoading: PropTypes.bool.isRequired,
   onGetCategories: PropTypes.func.isRequired,
+  item: PropTypes.object,
+};
+
+ItemForm.defaultProps = {
+  item: { name: '', description: '', category_id: '' }
 };
 
 const mapStateToProps = ({ categories: { categories, categoriesLoading } }) => ({

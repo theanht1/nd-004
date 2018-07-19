@@ -4,7 +4,7 @@ export const SET_ITEM_LOADING = 'item/SET_ITEM_LOADING';
 
 const initialState = {
   itemSubmitting: false,
-  item: {},
+  item: { name: '', description: '', category_id: 1 },
   itemLoading: false,
 };
 

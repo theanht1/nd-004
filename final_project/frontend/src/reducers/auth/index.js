@@ -3,7 +3,7 @@ export const SET_LOGIN_LOADING = 'auth/SET_LOGIN_LOADING';
 export const SET_CURRENT_USER_LOADING = 'auth/SET_CURRENT_USER_LOADING';
 
 const initialState = {
-  currentUser: null,
+  currentUser: {},
   loginLoading: false,
   currentUserLoading: false,
 };
