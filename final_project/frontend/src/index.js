@@ -9,8 +9,11 @@ import './style.css';
 import App from './App';
 import { AUTHORIZATION_COOKIE_NAME, getCurrentUser } from './actions/authActions';
 
-// TODO: Config backend host
-axios.defaults.baseURL = 'http://localhost:5000/api';
+axios.defaults.baseURL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:5000/api'
+  // eslint-disable-next-line no-undef
+  : window.location.origin;
+
 const accessToken = Cookies.get(AUTHORIZATION_COOKIE_NAME);
 if (accessToken && accessToken.length > 0) {
   store.dispatch(getCurrentUser({ accessToken }));
