@@ -1,0 +1,24 @@
+export const SET_CURRENT_USER = 'auth/SET_CURRENT_USER';
+export const SET_LOGIN_LOADING = 'auth/SET_LOGIN_LOADING';
+
+const initialState = {
+  currentUser: null,
+  loginLoading: false,
+};
+
+export default (state = initialState, { type, payload }) => {
+  switch (type) {
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: { ...payload },
+      };
+    case SET_LOGIN_LOADING:
+      return {
+        ...state,
+        loginLoading: payload,
+      };
+    default:
+      return state;
+  }
+};
