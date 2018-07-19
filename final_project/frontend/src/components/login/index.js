@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Button, CircularProgress, Typography} from '@material-ui/core/es/index';
-import { bindActionCreators } from 'redux';
+import { Button, CircularProgress, Typography } from '@material-ui/core/es/index';
 import { ggLogin } from '../../actions/userActions';
 
 const styles = {
@@ -44,12 +43,12 @@ Login.propTypes = {
   onGoogleLogin: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ auth: { loginLoading }}) => ({
+const mapStateToProps = ({ auth: { loginLoading } }) => ({
   loginLoading,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  onGoogleLogin: ggLogin,
-}, dispatch);
+const mapDispatchToProps = dispatch => ({
+  onGoogleLogin: () => { dispatch(ggLogin()); },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

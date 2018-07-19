@@ -8,8 +8,7 @@ export const AUTHORIZATION_COOKIE_NAME = 'c_t';
 
 const setAccessToken = (token) => {
   axios.defaults.headers.common.Authorization = token.length > 0
-    ? `Bearer ${token}`
-    : '';
+    ? token : '';
   Cookies.set(AUTHORIZATION_COOKIE_NAME, token, { expires: 3 });
 };
 
@@ -48,5 +47,18 @@ export const logout = () => (dispatch) => {
   dispatch({
     type: SET_CURRENT_USER,
     payload: {},
+  });
+};
+
+export const getCurrentUser = ({ accessToken }) => (dispatch) => {
+  setAccessToken(accessToken);
+  performRequest({
+    requestPromise: axios.get('/me/'),
+    onData: ({ data: { current_user } }) => {
+      dispatch({
+        type: SET_CURRENT_USER,
+        payload: current_user,
+      });
+    },
   });
 };
