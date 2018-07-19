@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { push } from 'connected-react-router';
-import { SET_ITEM_SUBMITTING } from '../reducers/item';
+import { SET_ITEM, SET_ITEM_LOADING, SET_ITEM_SUBMITTING } from '../reducers/item';
 import { performRequest } from '../api';
 
 
@@ -20,6 +20,30 @@ export const createItem = ({ name, description, category_id }) => (dispatch) => 
       dispatch({
         type: SET_ITEM_SUBMITTING,
         payload: true,
+      });
+    },
+  });
+};
+
+export const getItem = ({ item_id }) => (dispatch) => {
+  dispatch({
+    type: SET_ITEM_LOADING,
+    payload: true,
+  });
+
+  return performRequest({
+    dispatch,
+    requestPromise: axios.get(`/items/${item_id}/`),
+    onData: ({ data: { item } }) => {
+      dispatch({
+        type: SET_ITEM,
+        payload: item,
+      });
+    },
+    postUpdate: () => {
+      dispatch({
+        type: SET_ITEM_LOADING,
+        payload: false,
       });
     },
   });

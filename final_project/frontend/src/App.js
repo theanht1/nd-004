@@ -9,6 +9,7 @@ import Login from './pages/login';
 import { closeSnackbar } from './actions/appActions';
 import ItemsPage from './pages/itemsPage';
 import ItemNew from './pages/itemNew';
+import ItemDetail from './pages/itemDetail';
 
 const App = (props) => {
   const {
@@ -31,6 +32,7 @@ const App = (props) => {
               currentUserLoading || isLogin ? <ItemNew /> : <Redirect to="/login" />
             )}
           />
+          <Route exact path="/items/:item_id/" component={ItemDetail} />
         </Card>
         <Snackbar
           anchorOrigin={{

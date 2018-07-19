@@ -8,9 +8,10 @@ class ItemsPage extends React.Component {
   constructor(props) {
     super(props);
 
-    const { onGetCategories, onGetItems } = props;
+    const { onGetCategories, onGetItems, match: { params: { category_id } } } = props;
     onGetCategories();
-    onGetItems({ category_id: 1 });
+
+    onGetItems({ category_id });
   }
 
   componentWillReceiveProps(nextProps) {
