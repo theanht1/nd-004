@@ -28,7 +28,7 @@ export const performRequest = ({
   }
 
   if (dispatch) {
-    dispatch(openSnackbar({ message: errorMessage }));
+    dispatch(openSnackbar({ message: errorMessage, type: 'error' }));
   } else {
   // eslint-disable-next-line no-console
     console.log(errorMessage);

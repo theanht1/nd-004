@@ -4,14 +4,11 @@ import { connect } from 'react-redux';
 import {
   Button,
   CircularProgress,
-  Dialog, DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Typography
 } from '@material-ui/core/es/index';
 import { Link } from 'react-router-dom';
 import {deleteItem, getItem} from '../../actions/itemActions';
+import {openAlert} from "../../actions/appActions";
 
 class ItemDetail extends React.Component {
   constructor(props) {
@@ -24,25 +21,24 @@ class ItemDetail extends React.Component {
     onGetItem({ item_id });
   }
 
-  handleClose = () => {
-    this.setState({ openDialog: false});
+  openDeleteAlert = () => {
+    const { onOpenAlert } = this.props;
+    onOpenAlert({
+      title: 'Warning!',
+      content: 'This will remove this item permanently. Are you sure?',
+      onSuccess: this.handleDelete,
+    });
   };
 
   handleDelete = () => {
     const { onDeleteItem, match: { params: { item_id } } } = this.props;
-    onDeleteItem({ id: item_id });
-  };
-
-  deleteItem = () => {
-    this.setState({ openDialog: true});
-
+    return onDeleteItem({ id: item_id });
   };
 
   render() {
     const {
       item, itemLoading, currentUser, currentUserLoading, history: { goBack },
     } = this.props;
-    const { openDialog } = this.state;
     if (itemLoading || currentUserLoading) {
       return <CircularProgress size={68} />;
     }
@@ -52,24 +48,6 @@ class ItemDetail extends React.Component {
 
     return (
       <div className="item-form">
-        <Dialog open={openDialog} onClose={this.handleClose}>
-          <DialogTitle>
-            Warning!
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              This will remove this item permanently. Are you sure?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose}>
-              No
-            </Button>
-            <Button onClick={this.handleDelete} color="secondary">
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
         <Typography variant="title">
           {item.name}
         </Typography>
@@ -83,7 +61,7 @@ class ItemDetail extends React.Component {
           </Button>
           {isOwner && (
           <div>
-            <Button onClick={this.deleteItem}
+            <Button onClick={this.openDeleteAlert}
                     variant="contained" color="secondary" className="margin-right-10">
               Delete
             </Button>
@@ -122,6 +100,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = dispatch => ({
   onGetItem: ({ item_id }) => dispatch(getItem({ item_id })),
   onDeleteItem: ({ id }) => dispatch(deleteItem({ id })),
+  onOpenAlert: (alert) => dispatch(openAlert(alert)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);
