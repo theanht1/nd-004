@@ -4,7 +4,7 @@ export const openSnackbar = ({ message }) => (dispatch) => {
   dispatch({
     type: SET_SNACK_BAR_STATE,
     payload: {
-      showSnackbar: true,
+      openSnackbar: true,
       snackbarMessage: message,
     },
   });
@@ -14,7 +14,7 @@ export const closeSnackbar = () => (dispatch) => {
   dispatch({
     type: SET_SNACK_BAR_STATE,
     payload: {
-      showSnackbar: false,
+      openSnackbar: false,
       snackbarMessage: '',
     },
   });

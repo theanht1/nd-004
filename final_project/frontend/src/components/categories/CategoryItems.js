@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
+  Button,
   CircularProgress, Grid, List, Typography,
 } from '@material-ui/core/es/index';
+import { Link } from 'react-router-dom';
 import CategoryTag from './CategoryTag';
 import ItemTag from '../items/ItemTag';
 
 const CategoryItems = (props) => {
   const {
     type, category_id, categories, categoriesLoading, latestItems,
-    latestItemsLoading, items, itemsLoading,
+    latestItemsLoading, items, itemsLoading, isLogin,
   } = props;
 
   const renderCategoriesList = () => (
@@ -58,6 +60,13 @@ const CategoryItems = (props) => {
   };
   return (
     <Grid container spacing={24}>
+      <Grid item xs={12}>
+        {isLogin && (
+        <Button variant="contained" component={Link} to="/items/new">
+          Add new item
+        </Button>
+        )}
+      </Grid>
       <Grid item xs={4}>
         {renderCategoriesList()}
       </Grid>
@@ -70,13 +79,14 @@ const CategoryItems = (props) => {
 
 CategoryItems.propTypes = {
   type: PropTypes.oneOf(['latest', 'category']).isRequired,
+  category_id: PropTypes.string,
   categories: PropTypes.array.isRequired,
   categoriesLoading: PropTypes.bool.isRequired,
   latestItems: PropTypes.array.isRequired,
   latestItemsLoading: PropTypes.bool.isRequired,
   items: PropTypes.array.isRequired,
   itemsLoading: PropTypes.bool.isRequired,
-  category_id: PropTypes.string,
+  isLogin: PropTypes.bool.isRequired,
 };
 
 CategoryItems.defaultProps = {
@@ -89,6 +99,7 @@ const mapStateToProps = ({
     latestItems, latestItemsLoading,
     items, itemsLoading,
   },
+  auth: { currentUser },
 }) => ({
   categories,
   categoriesLoading,
@@ -96,6 +107,7 @@ const mapStateToProps = ({
   latestItemsLoading,
   items,
   itemsLoading,
+  isLogin: !!currentUser && Object.keys(currentUser).length > 0,
 });
 
 export default connect(mapStateToProps)(CategoryItems);

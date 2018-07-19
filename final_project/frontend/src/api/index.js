@@ -6,16 +6,25 @@ export const performRequest = ({
 }) => requestPromise.then((response) => {
   onData(response);
   postUpdate();
-}).catch((error) => {
-  let errorMessage;
+}, (error) => {
+  let errorMessage = 'Something went wrong! Please try again.';
   if (error.response) {
     if (onError) {
       onError(error.response);
       return;
     }
-    errorMessage = error.response.error;
-  } else {
-    errorMessage = 'Something went wrong! Please try again.';
+
+    if (error.response.data && error.response.data.error) {
+      const errors = error.response.data.error;
+      // errors can be a string or object of Marshmallow errors
+      if (typeof (errors) === 'string') {
+        errorMessage = errors;
+      } else {
+        const firstError = Object.keys(errors)[0];
+        errorMessage = `${firstError}: ${errors[firstError]}`;
+        // errorMessage = Object.keys(errors).map(key => `${key}: ${errors[key]}`).join('\n');
+      }
+    }
   }
 
   if (dispatch) {

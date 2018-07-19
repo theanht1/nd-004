@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { push } from 'connected-react-router';
-import { SET_CURRENT_USER, SET_LOGIN_LOADING } from '../reducers/auth';
+import {SET_CURRENT_USER, SET_CURRENT_USER_LOADING, SET_LOGIN_LOADING} from '../reducers/auth';
 import { performRequest } from '../api';
 
 export const AUTHORIZATION_COOKIE_NAME = 'c_t';
@@ -51,6 +51,10 @@ export const logout = () => (dispatch) => {
 };
 
 export const getCurrentUser = ({ accessToken }) => (dispatch) => {
+  dispatch({
+    type: SET_CURRENT_USER_LOADING,
+    payload: true,
+  });
   setAccessToken(accessToken);
   performRequest({
     requestPromise: axios.get('/me/'),
@@ -58,6 +62,12 @@ export const getCurrentUser = ({ accessToken }) => (dispatch) => {
       dispatch({
         type: SET_CURRENT_USER,
         payload: current_user,
+      });
+    },
+    postUpdate: () => {
+      dispatch({
+        type: SET_CURRENT_USER_LOADING,
+        payload: false,
       });
     },
   });

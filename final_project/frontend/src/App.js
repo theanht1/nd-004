@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, withRouter } from 'react-router';
+import { Redirect, Route, withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Card, Snackbar } from '@material-ui/core/es/index';
 import Header from './components/header';
@@ -8,9 +8,13 @@ import Home from './pages/home';
 import Login from './pages/login';
 import { closeSnackbar } from './actions/appActions';
 import ItemsPage from './pages/itemsPage';
+import ItemNew from './pages/itemNew';
 
 const App = (props) => {
-  const { openSnackbar, snackbarMessage, onCloseSnackbar } = props;
+  const {
+    openSnackbar, snackbarMessage, onCloseSnackbar,
+    isLogin, currentUserLoading,
+  } = props;
 
   return (
     <div>
@@ -20,6 +24,13 @@ const App = (props) => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/categories/:category_id/items/" component={ItemsPage} />
+          <Route
+            exact
+            path="/items/new"
+            render={() => (
+              currentUserLoading || isLogin ? <ItemNew /> : <Redirect to="/login" />
+            )}
+          />
         </Card>
         <Snackbar
           anchorOrigin={{
@@ -27,7 +38,7 @@ const App = (props) => {
             horizontal: 'right',
           }}
           open={openSnackbar}
-          autoHideDuration={6000}
+          autoHideDuration={4000}
           onClose={onCloseSnackbar}
           message={snackbarMessage}
         />
@@ -37,14 +48,26 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  openSnackbar: PropTypes.bool.isRequired,
-  snackbarMessage: PropTypes.string.isRequired,
+  openSnackbar: PropTypes.bool,
+  snackbarMessage: PropTypes.string,
   onCloseSnackbar: PropTypes.func.isRequired,
+  isLogin: PropTypes.bool.isRequired,
+  currentUserLoading: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = ({ app: { openSnackbar, snackbarMessage } }) => ({
+App.defaultProps = {
+  openSnackbar: false,
+  snackbarMessage: '',
+};
+
+const mapStateToProps = ({
+  app: { openSnackbar, snackbarMessage },
+  auth: { currentUser, currentUserLoading },
+}) => ({
   openSnackbar,
   snackbarMessage,
+  currentUserLoading,
+  isLogin: !!currentUser && Object.keys(currentUser).length > 0,
 });
 
 const mapDispatchToProps = dispatch => ({
