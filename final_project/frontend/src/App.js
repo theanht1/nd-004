@@ -7,6 +7,7 @@ import Header from './components/header';
 import Home from './pages/home';
 import Login from './pages/login';
 import { closeSnackbar } from './actions/appActions';
+import ItemsPage from './pages/itemsPage';
 
 const App = (props) => {
   const { openSnackbar, snackbarMessage, onCloseSnackbar } = props;
@@ -18,6 +19,7 @@ const App = (props) => {
         <Card className="container">
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/categories/:category_id/items/" component={ItemsPage} />
         </Card>
         <Snackbar
           anchorOrigin={{

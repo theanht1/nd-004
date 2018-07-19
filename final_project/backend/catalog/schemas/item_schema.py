@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, pre_load, validate
 
+from catalog.schemas.category_schema import CategorySchema
+
 
 class ItemSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -8,6 +10,7 @@ class ItemSchema(Schema):
     description = fields.Str(required=True, validate=validate.Length(1))
     category_id = fields.Int(required=True)
     created_at = fields.Str(dump_only=True)
+    category = fields.Nested(CategorySchema, dump_only=True)
 
     @pre_load
     def strip_fields(self, in_data):
