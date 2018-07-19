@@ -1,12 +1,15 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 
 from catalog import db
 from catalog.models import User
+from catalog.schemas.user_schema import UserSchema
 from catalog.utils import auth_helper
 from catalog.utils.auth_helper import create_jwt_token
+from catalog.utils.decorators import login_required
 from catalog.utils.responses_helper import render_json_error, render_json
 
 bp = Blueprint('auth', __name__, url_prefix='/api')
+userSchema = UserSchema()
 
 
 @bp.route('/google-login/', methods=['POST'])
@@ -33,5 +36,13 @@ def google_login():
 
     return render_json({
         'access_token': create_jwt_token(user),
-        'current_user': user.serialize,
+        'current_user': userSchema.dump(user).data,
+    })
+
+
+@bp.route('/me/')
+@login_required
+def get_current_user():
+    return render_json({
+        'current_user': userSchema.dump(g.current_user).data,
     })
