@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, CircularProgress, Typography } from '@material-ui/core/es/index';
 import { ggLogin } from '../../actions/authActions';
+import { openSnackbar } from '../../actions/appActions';
 
 const styles = {
   loginSession: {
@@ -12,7 +13,7 @@ const styles = {
 };
 
 const Login = (props) => {
-  const { loginLoading, onGoogleLogin } = props;
+  const { loginLoading, onGoogleLogin, onOpenSnackbar } = props;
 
   const googleLogin = () => {
     global.gapi.load('auth2', () => {
@@ -20,8 +21,11 @@ const Login = (props) => {
       GoogleAuth.signIn()
         .then((res) => {
           onGoogleLogin({ id_token: res.getAuthResponse().id_token });
-        }, (err) => {
-          console.log(err);
+        }, () => {
+          onOpenSnackbar({
+            type: 'error',
+            message: 'Cannot authorize with Google account. Please try again.',
+          });
         });
     });
   };
@@ -41,6 +45,7 @@ const Login = (props) => {
 Login.propTypes = {
   loginLoading: PropTypes.bool.isRequired,
   onGoogleLogin: PropTypes.func.isRequired,
+  onOpenSnackbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ auth: { loginLoading } }) => ({
@@ -48,7 +53,8 @@ const mapStateToProps = ({ auth: { loginLoading } }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onGoogleLogin: ({ id_token }) => { dispatch(ggLogin({ id_token })); },
+  onGoogleLogin: ({ id_token }) => dispatch(ggLogin({ id_token })),
+  onOpenSnackbar: snackbar => dispatch(openSnackbar(snackbar)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

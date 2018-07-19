@@ -2,7 +2,7 @@ import axios from 'axios';
 import { push } from 'connected-react-router';
 import { SET_ITEM, SET_ITEM_LOADING, SET_ITEM_SUBMITTING } from '../reducers/item';
 import { performRequest } from '../api';
-import {openSnackbar} from "./appActions";
+import { openSnackbar } from './appActions';
 
 
 export const createItem = ({ name, description, category_id }) => (dispatch) => {

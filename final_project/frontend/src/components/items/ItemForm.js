@@ -5,8 +5,8 @@ import {
   Button,
   CircularProgress, FormControl, Grid, Input, InputLabel, MenuItem, Select,
 } from '@material-ui/core/es/index';
+import { withRouter } from 'react-router';
 import { getCategories } from '../../actions/categoriesActions';
-import {withRouter} from "react-router";
 
 class ItemForm extends React.Component {
   constructor(props) {
@@ -20,10 +20,12 @@ class ItemForm extends React.Component {
 
     const { onGetCategories } = props;
     onGetCategories();
+
+    this.handlerChange = this.handlerChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const {item} = nextProps;
+    const { item } = nextProps;
     if (item.id) {
       this.setState({
         name: item.name,
@@ -33,12 +35,14 @@ class ItemForm extends React.Component {
     }
   }
 
-  handlerChange = (event) => {
+  handlerChange(event) {
     this.setState({ [event.target.name]: event.target.value });
-  };
+  }
 
   render() {
-    const { categories, categoriesLoading, onSubmit, history: { goBack } } = this.props;
+    const {
+      categories, categoriesLoading, onSubmit, history: { goBack },
+    } = this.props;
     if (categoriesLoading) {
       return <CircularProgress size={68} />;
     }
@@ -80,14 +84,17 @@ class ItemForm extends React.Component {
         </FormControl>
         <div className="margin-top-20">
           <Button
-              onClick={() => goBack()}
-              variant="contained"
-              color="default" className="margin-right-10">
+            onClick={() => goBack()}
+            variant="contained"
+            color="default"
+            className="margin-right-10"
+          >
             Cancel
           </Button>
           <Button
             onClick={() => onSubmit({ name, description, category_id })}
-            variant="contained" color="primary"
+            variant="contained"
+            color="primary"
           >
             Submit
           </Button>
@@ -102,10 +109,12 @@ ItemForm.propTypes = {
   categoriesLoading: PropTypes.bool.isRequired,
   onGetCategories: PropTypes.func.isRequired,
   item: PropTypes.object,
+  onSubmit: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 ItemForm.defaultProps = {
-  item: { name: '', description: '', category_id: '' }
+  item: { name: '', description: '', category_id: '' },
 };
 
 const mapStateToProps = ({ categories: { categories, categoriesLoading } }) => ({

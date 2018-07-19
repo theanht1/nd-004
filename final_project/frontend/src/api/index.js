@@ -21,7 +21,8 @@ export const performRequest = ({
         errorMessage = errors;
       } else {
         const firstError = Object.keys(errors)[0];
-        errorMessage = `${firstError}: ${errors[firstError]}`;
+        const keyName = `${firstError[0].toUpperCase()}${firstError.substr(1)}`;
+        errorMessage = `${keyName}: ${errors[firstError]}`;
         // errorMessage = Object.keys(errors).map(key => `${key}: ${errors[key]}`).join('\n');
       }
     }

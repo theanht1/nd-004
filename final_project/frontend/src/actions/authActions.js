@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { push } from 'connected-react-router';
-import {SET_CURRENT_USER, SET_CURRENT_USER_LOADING, SET_LOGIN_LOADING} from '../reducers/auth';
+import { SET_CURRENT_USER, SET_CURRENT_USER_LOADING, SET_LOGIN_LOADING } from '../reducers/auth';
 import { performRequest } from '../api';
-import {openSnackbar} from "./appActions";
+import { openSnackbar } from './appActions';
 
 export const AUTHORIZATION_COOKIE_NAME = 'c_t';
 

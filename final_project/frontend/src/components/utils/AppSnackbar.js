@@ -31,7 +31,7 @@ const AppSnackbar = (props) => {
         horizontal: 'right',
       }}
       open={open}
-      autoHideDuration={4000}
+      autoHideDuration={3000}
       onClose={onCloseSnackbar}
     >
       <SnackbarContent
