@@ -48,6 +48,27 @@ export const editItem = ({
   });
 };
 
+export const deleteItem = ({ id }) => (dispatch) => {
+  dispatch({
+    type: SET_ITEM_SUBMITTING,
+    payload: true,
+  });
+
+  return performRequest({
+    dispatch,
+    requestPromise: axios.delete(`/items/${id}/`),
+    onData: () => {
+      dispatch(push('/'));
+    },
+    postUpdate: () => {
+      dispatch({
+        type: SET_ITEM_SUBMITTING,
+        payload: true,
+      });
+    },
+  });
+};
+
 export const getItem = ({ item_id }) => (dispatch) => {
   dispatch({
     type: SET_ITEM_LOADING,
