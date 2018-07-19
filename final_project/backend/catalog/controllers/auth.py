@@ -31,4 +31,7 @@ def google_login():
         db.session.add(user)
         db.session.commit()
 
-    return render_json({'access_token': create_jwt_token(user)})
+    return render_json({
+        'access_token': create_jwt_token(user),
+        'current_user': user.serialize,
+    })

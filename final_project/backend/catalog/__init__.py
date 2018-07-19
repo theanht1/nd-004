@@ -1,5 +1,6 @@
-from flask import Flask
 from os import environ
+from flask import Flask
+from flask_cors import CORS
 
 from catalog.db import db
 from config import production, test, development
@@ -9,7 +10,7 @@ from catalog.controllers import init_controller
 
 def create_app(cfg=None):
     app = Flask(__name__)
-
+    CORS(app)
     load_config(app, cfg)
     db.init_app(app)
 
