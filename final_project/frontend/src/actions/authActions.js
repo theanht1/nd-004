@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { push } from 'connected-react-router';
 import {SET_CURRENT_USER, SET_CURRENT_USER_LOADING, SET_LOGIN_LOADING} from '../reducers/auth';
 import { performRequest } from '../api';
+import {openSnackbar} from "./appActions";
 
 export const AUTHORIZATION_COOKIE_NAME = 'c_t';
 
@@ -32,6 +33,10 @@ export const ggLogin = ({ id_token }) => (dispatch) => {
       });
       setAccessToken(access_token);
       dispatch(push('/'));
+      dispatch(openSnackbar({
+        type: 'success',
+        message: 'Login successfully!',
+      }));
     },
     postUpdate: () => {
       dispatch({
@@ -48,6 +53,10 @@ export const logout = () => (dispatch) => {
     type: SET_CURRENT_USER,
     payload: {},
   });
+  dispatch(openSnackbar({
+    type: 'success',
+    message: 'Logout successfully!',
+  }));
 };
 
 export const getCurrentUser = ({ accessToken }) => (dispatch) => {
