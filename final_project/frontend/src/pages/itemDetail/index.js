@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@material-ui/core/es/index';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import { deleteItem, getItem } from '../../actions/itemActions';
 import { openAlert } from '../../actions/appActions';
 
@@ -43,6 +44,10 @@ class ItemDetail extends React.Component {
       return <CircularProgress size={68} />;
     }
 
+    if (!item || !item.name) {
+      return <Redirect to="/" />;
+    }
+
     const isOwner = currentUser && currentUser.id === item.user_id;
     const editURL = `/items/${item.id}/edit`;
 
@@ -52,7 +57,13 @@ class ItemDetail extends React.Component {
           {item.name}
         </Typography>
         <Typography variant="body1" className="margin-top-20">
-          {item.description}
+          {item.description.split('\n').map((para, key) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <span key={key}>
+              {para}
+              <br />
+            </span>
+          ))}
         </Typography>
 
         <div className="margin-top-20 flex">
