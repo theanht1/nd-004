@@ -23,12 +23,12 @@ def seed():
     """Create some default categories"""
     # Seed some default categories
     categories = [
-        {'name': 'Football'},
-        {'name': 'Baseball'},
-        {'name': 'Basketball'},
-        {'name': 'Snowboarding'},
-        {'name': 'Skating'},
-        {'name': 'Hockey'},
+        {'name': 'Backend'},
+        {'name': 'Frontend'},
+        {'name': 'DevOps'},
+        {'name': 'QA'},
+        {'name': 'Data Science'},
+        {'name': 'BlockChain'},
     ]
 
     for category in categories:
