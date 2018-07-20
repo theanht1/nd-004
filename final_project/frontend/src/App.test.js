@@ -6,7 +6,7 @@ import store, { history } from './store';
 import App from './App';
 
 test('App renders without crashing', () => {
-  const app = mount(
+  mount(
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <App />

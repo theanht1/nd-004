@@ -13,7 +13,7 @@ describe('CategoryItem', () => {
     const categoryTag = shallow(
       <CategoryTag category={category} />,
     );
-    expect(categoryTag.find(ListItemText).length).toBe(1);
+    expect(categoryTag.find(ListItemText)).toHaveLength(1);
     expect(categoryTag.find(ListItemText).first().html())
       .toEqual(expect.stringContaining(category.name));
   });

@@ -31,7 +31,7 @@ describe('ItemForm', () => {
   test('should render correctly', () => {
     appComponent.update();
     const formComponent = appComponent.find(ItemForm).first();
-    expect(dispatchMock.mock.calls.length).toBe(1);
-    // console.log(formComponent.find('input [name="name"]').length).toBe(2);
+    expect(dispatchMock.mock.calls).toHaveLength(1);
+    expect(formComponent.find('input [name="name"]')).toHaveLength(2);
   });
 });

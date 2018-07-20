@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { ListItemText, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import Header from './index';
 import store, { history } from '../../store';
-import {Provider} from "react-redux";
-import {ConnectedRouter} from "connected-react-router";
-import {SET_CURRENT_USER} from "../../reducers/auth";
+import { SET_CURRENT_USER } from '../../reducers/auth';
 
 describe('Header', () => {
   let appComponent;
@@ -21,8 +21,8 @@ describe('Header', () => {
 
   test('should show login button', () => {
     expect(appComponent.find(Button)
-      .filterWhere(item => item.prop('to') === '/login').length)
-      .toBe(1);
+      .filterWhere(item => item.prop('to') === '/login'))
+      .toHaveLength(1);
   });
 
   test('should not show login if user is authenticated', () => {
@@ -32,7 +32,7 @@ describe('Header', () => {
     });
     appComponent.update();
     expect(appComponent.find(Button)
-      .filterWhere(item => item.prop('to') === '/login').length)
-      .toBe(0);
+      .filterWhere(item => item.prop('to') === '/login'))
+      .toHaveLength(0);
   });
 });
