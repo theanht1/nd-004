@@ -4,7 +4,13 @@ import { SET_ITEM, SET_ITEM_LOADING, SET_ITEM_SUBMITTING } from '../reducers/ite
 import { performRequest } from '../api';
 import { openSnackbar } from './appActions';
 
-
+/**
+ * Create item dispatch
+ * @param {String} name
+ * @param {String} description
+ * @param {Number} category_id
+ * @returns {Function}
+ */
 export const createItem = ({ name, description, category_id }) => (dispatch) => {
   dispatch({
     type: SET_ITEM_SUBMITTING,
@@ -30,6 +36,14 @@ export const createItem = ({ name, description, category_id }) => (dispatch) => 
   });
 };
 
+/**
+ * Edit item dispatch
+ * @param {Number} id
+ * @param {String} name
+ * @param {String} description
+ * @param {Number} category_id
+ * @returns {Function}
+ */
 export const editItem = ({
   id, name, description, category_id,
 }) => (dispatch) => {
@@ -57,6 +71,11 @@ export const editItem = ({
   });
 };
 
+/**
+ * Delete item dispatch
+ * @param {Number} id
+ * @returns {Function}
+ */
 export const deleteItem = ({ id }) => (dispatch) => {
   dispatch({
     type: SET_ITEM_SUBMITTING,
@@ -82,6 +101,7 @@ export const deleteItem = ({ id }) => (dispatch) => {
   });
 };
 
+// Get item with id
 export const getItem = ({ item_id }) => (dispatch) => {
   dispatch({
     type: SET_ITEM_LOADING,

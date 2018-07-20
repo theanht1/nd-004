@@ -7,17 +7,24 @@ import { openSnackbar } from './appActions';
 
 export const AUTHORIZATION_COOKIE_NAME = 'c_t';
 
+// Set token to request header and cookie
 const setAccessToken = (token) => {
   axios.defaults.headers.common.Authorization = token.length > 0
     ? token : '';
   Cookies.set(AUTHORIZATION_COOKIE_NAME, token, { expires: 3 });
 };
 
+// Remove current access token, typically using for logout
 const removeAccessToken = () => {
   axios.defaults.headers.common.Authorization = '';
   Cookies.remove(AUTHORIZATION_COOKIE_NAME);
 };
 
+/**
+ * Login with Google
+ * @param {String} id_token
+ * @returns {Function}
+ */
 export const ggLogin = ({ id_token }) => (dispatch) => {
   dispatch({
     type: SET_LOGIN_LOADING,
@@ -47,6 +54,7 @@ export const ggLogin = ({ id_token }) => (dispatch) => {
   });
 };
 
+// logout() return a dispatch function for user logging out
 export const logout = () => (dispatch) => {
   removeAccessToken();
   dispatch({
@@ -59,6 +67,11 @@ export const logout = () => (dispatch) => {
   }));
 };
 
+/**
+ * Get current user by access token
+ * @param {String} accessToken
+ * @returns {Function}
+ */
 export const getCurrentUser = ({ accessToken }) => (dispatch) => {
   dispatch({
     type: SET_CURRENT_USER_LOADING,

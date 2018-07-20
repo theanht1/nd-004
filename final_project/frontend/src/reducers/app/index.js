@@ -2,11 +2,13 @@ export const SET_SNACK_BAR_STATE = 'app/SET_SNACK_BAR_STATE';
 export const SET_ALERT_STATE = 'app/SET_ALERT_STATE';
 
 const initialState = {
+  // Snackbar state
   snackbar: {
     open: false,
     message: '',
     type: 'info',
   },
+  // Alert modal state
   alert: {
     open: false,
     title: '',

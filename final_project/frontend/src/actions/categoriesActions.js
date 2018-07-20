@@ -7,7 +7,7 @@ import {
 } from '../reducers/categories';
 import { performRequest } from '../api';
 
-
+// Get categories
 export const getCategories = () => (dispatch) => {
   dispatch({
     type: SET_CATEGORIES_LOADING,
@@ -27,6 +27,7 @@ export const getCategories = () => (dispatch) => {
   });
 };
 
+// Get latest items
 export const getLatestItems = () => (dispatch) => {
   dispatch({
     type: SET_LATEST_ITEMS_LOADING,
@@ -46,6 +47,7 @@ export const getLatestItems = () => (dispatch) => {
   });
 };
 
+// Get items of a category
 export const getItems = ({ category_id }) => (dispatch) => {
   dispatch({
     type: SET_ITEMS_LOADING,

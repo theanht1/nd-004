@@ -1,5 +1,11 @@
 import { SET_ALERT_STATE, SET_SNACK_BAR_STATE } from '../reducers/app';
 
+/**
+ * Open snackbar to notice user
+ * @param {String} message
+ * @param {String} type
+ * @returns {Function} dispatch function
+ */
 export const openSnackbar = ({ message, type }) => (dispatch) => {
   dispatch({
     type: SET_SNACK_BAR_STATE,
@@ -11,6 +17,7 @@ export const openSnackbar = ({ message, type }) => (dispatch) => {
   });
 };
 
+// closeSnackbar() return a dispatch function to close the snackbar
 export const closeSnackbar = () => (dispatch) => {
   dispatch({
     type: SET_SNACK_BAR_STATE,
@@ -22,6 +29,13 @@ export const closeSnackbar = () => (dispatch) => {
   });
 };
 
+/**
+ * Open alert modal
+ * @param {String} title
+ * @param {String} content
+ * @param {Function} onSuccess
+ * @returns {Function} dispatch function
+ */
 export const openAlert = ({ title, content, onSuccess }) => (dispatch) => {
   dispatch({
     type: SET_ALERT_STATE,
@@ -34,6 +48,7 @@ export const openAlert = ({ title, content, onSuccess }) => (dispatch) => {
   });
 };
 
+// closeAlert() return a dispatch function to close the alert modal
 export const closeAlert = () => (dispatch) => {
   dispatch({
     type: SET_ALERT_STATE,
