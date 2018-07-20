@@ -1,6 +1,7 @@
-import React from 'react';
-import store  from '../store';
-import {closeAlert, closeSnackbar, openAlert, openSnackbar} from "./appActions";
+import store from '../store';
+import {
+  closeAlert, closeSnackbar, openAlert, openSnackbar,
+} from './appActions';
 
 
 describe('Snackbar', () => {

@@ -30,7 +30,7 @@ export const ggLogin = ({ id_token }) => (dispatch) => {
     type: SET_LOGIN_LOADING,
     payload: true,
   });
-  performRequest({
+  return performRequest({
     dispatch,
     requestPromise: axios.post('/google-login/', { id_token }),
     onData: ({ data: { access_token, current_user } }) => {
@@ -78,7 +78,7 @@ export const getCurrentUser = ({ accessToken }) => (dispatch) => {
     payload: true,
   });
   setAccessToken(accessToken);
-  performRequest({
+  return performRequest({
     requestPromise: axios.get('/me/'),
     onData: ({ data: { current_user } }) => {
       dispatch({
