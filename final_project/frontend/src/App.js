@@ -5,13 +5,13 @@ import {
 } from 'react-router';
 import { connect } from 'react-redux';
 import { Card } from '@material-ui/core/es/index';
-import Header from './components/header';
-import Home from './pages/home';
-import Login from './pages/login';
-import ItemsPage from './pages/itemsPage';
-import ItemNew from './pages/itemNew';
-import ItemDetail from './pages/itemDetail';
-import ItemEdit from './pages/itemEdit';
+import Header from './components/Header';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import ItemsPage from './pages/ItemsPage';
+import ItemNew from './pages/ItemNew';
+import ItemDetail from './pages/ItemDetail';
+import ItemEdit from './pages/ItemEdit';
 import AppSnackbar from './components/utils/AppSnackbar';
 import AppAlert from './components/utils/AppAlert';
 

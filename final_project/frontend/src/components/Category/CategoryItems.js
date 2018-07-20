@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core/es/index';
 import { Link } from 'react-router-dom';
 import CategoryTag from './CategoryTag';
-import ItemTag from '../items/ItemTag';
+import ItemTag from '../Item/ItemTag';
 
 const CategoryItems = (props) => {
   const {

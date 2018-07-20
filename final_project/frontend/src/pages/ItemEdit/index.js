@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { CircularProgress, Typography } from '@material-ui/core/es/index';
 import { push } from 'connected-react-router';
-import ItemForm from '../../components/items/ItemForm';
+import ItemForm from '../../components/Item/ItemForm';
 import { editItem, getItem } from '../../actions/itemActions';
 
 class ItemEdit extends React.Component {
