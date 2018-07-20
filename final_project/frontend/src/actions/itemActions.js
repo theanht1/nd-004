@@ -86,6 +86,12 @@ export const deleteItem = ({ id }) => (dispatch) => {
     dispatch,
     requestPromise: axios.delete(`/items/${id}/`),
     onData: () => {
+      dispatch({
+        type: SET_ITEM,
+        payload: {
+          name: '', description: '', category_id: 0,
+        },
+      });
       dispatch(push('/'));
       dispatch(openSnackbar({
         type: 'success',

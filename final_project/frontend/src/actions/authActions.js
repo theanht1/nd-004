@@ -92,5 +92,6 @@ export const getCurrentUser = ({ accessToken }) => (dispatch) => {
         payload: false,
       });
     },
+    onError: () => {},
   });
 };

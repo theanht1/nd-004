@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { push } from 'connected-react-router';
 import { openSnackbar } from '../actions/appActions';
 
 /**
@@ -22,6 +23,7 @@ export const performRequest = ({
   if (error.response) {
     if (onError) {
       onError(error.response);
+      postUpdate();
       return;
     }
 
@@ -42,6 +44,11 @@ export const performRequest = ({
   if (dispatch) {
     // Open snackbar with errorMessage
     dispatch(openSnackbar({ message: errorMessage, type: 'error' }));
+
+    // Redirect to home with 404 error
+    if (error.response.status === 404) {
+      dispatch(push('/'));
+    }
   } else {
   // eslint-disable-next-line no-console
     console.log(errorMessage);

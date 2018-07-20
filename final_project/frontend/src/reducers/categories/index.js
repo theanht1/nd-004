@@ -17,15 +17,15 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case SET_CATEGORIES:
-      return { ...state, categories: [...payload] };
+      return { ...state, categories: payload };
     case SET_CATEGORIES_LOADING:
       return { ...state, categoriesLoading: payload };
     case SET_LATEST_ITEMS:
-      return { ...state, latestItems: [...payload] };
+      return { ...state, latestItems: payload };
     case SET_LATEST_ITEMS_LOADING:
       return { ...state, latestItemsLoading: payload };
     case SET_ITEMS:
-      return { ...state, items: [...payload] };
+      return { ...state, items: payload };
     case SET_ITEMS_LOADING:
       return { ...state, itemsLoading: payload };
     default:

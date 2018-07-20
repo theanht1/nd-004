@@ -13,7 +13,7 @@ export default (state = initialState, { type, payload }) => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: { ...payload },
+        currentUser: payload,
       };
     case SET_LOGIN_LOADING:
       return {

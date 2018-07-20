@@ -7,7 +7,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router';
 import { deleteItem, getItem } from '../../actions/itemActions';
 import { openAlert } from '../../actions/appActions';
 
@@ -42,10 +41,6 @@ class ItemDetail extends React.Component {
     } = this.props;
     if (itemLoading || currentUserLoading) {
       return <CircularProgress size={68} />;
-    }
-
-    if (!item || !item.name) {
-      return <Redirect to="/" />;
     }
 
     const isOwner = currentUser && currentUser.id === item.user_id;
