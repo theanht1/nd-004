@@ -5,7 +5,7 @@ import {
   Button,
   CircularProgress,
   Typography,
-} from '@material-ui/core/es/index';
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { deleteItem, getItem } from '../../actions/itemActions';

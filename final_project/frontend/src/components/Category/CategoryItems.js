@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   Button,
   CircularProgress, Grid, List, Typography,
-} from '@material-ui/core/es/index';
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import CategoryTag from './CategoryTag';
 import ItemTag from '../Item/ItemTag';

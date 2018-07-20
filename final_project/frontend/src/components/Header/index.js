@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   AppBar, Button, Toolbar, Typography,
-} from '@material-ui/core/es/index';
+} from '@material-ui/core';
 import { logout } from '../../actions/authActions';
 
 

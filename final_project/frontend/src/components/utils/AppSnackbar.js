@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Snackbar, SnackbarContent } from '@material-ui/core/es/index';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
 import { closeSnackbar } from '../../actions/appActions';
 
 const styles = {

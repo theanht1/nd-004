@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   Button,
   CircularProgress, FormControl, Grid, Input, InputLabel, MenuItem, Select,
-} from '@material-ui/core/es/index';
+} from '@material-ui/core';
 import { withRouter } from 'react-router';
 import { getCategories } from '../../actions/categoriesActions';
 

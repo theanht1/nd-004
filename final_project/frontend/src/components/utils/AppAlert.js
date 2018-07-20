@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-} from '@material-ui/core/es/index';
+} from '@material-ui/core';
 import { closeAlert } from '../../actions/appActions';
 
 

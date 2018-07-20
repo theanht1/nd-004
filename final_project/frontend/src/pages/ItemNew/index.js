@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Typography } from '@material-ui/core/es/index';
+import { Typography } from '@material-ui/core';
 import ItemForm from '../../components/Item/ItemForm';
 import { createItem } from '../../actions/itemActions';
 

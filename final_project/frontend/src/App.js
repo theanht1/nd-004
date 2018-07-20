@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@material-ui/core/es/index';
+import { Card } from '@material-ui/core';
 import Header from './components/Header';
 import AppSnackbar from './components/utils/AppSnackbar';
 import AppAlert from './components/utils/AppAlert';

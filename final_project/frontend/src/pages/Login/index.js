@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, CircularProgress, Typography } from '@material-ui/core/es/index';
+import { Button, CircularProgress, Typography } from '@material-ui/core';
 import { ggLogin } from '../../actions/authActions';
 import { openSnackbar } from '../../actions/appActions';
 
