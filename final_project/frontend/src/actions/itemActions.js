@@ -30,7 +30,7 @@ export const createItem = ({ name, description, category_id }) => (dispatch) => 
     postUpdate: () => {
       dispatch({
         type: SET_ITEM_SUBMITTING,
-        payload: true,
+        payload: false,
       });
     },
   });
@@ -65,7 +65,7 @@ export const editItem = ({
     postUpdate: () => {
       dispatch({
         type: SET_ITEM_SUBMITTING,
-        payload: true,
+        payload: false,
       });
     },
   });
@@ -101,7 +101,7 @@ export const deleteItem = ({ id }) => (dispatch) => {
     postUpdate: () => {
       dispatch({
         type: SET_ITEM_SUBMITTING,
-        payload: true,
+        payload: false,
       });
     },
   });

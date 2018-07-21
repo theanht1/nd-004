@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import ItemForm from './ItemForm';
 import store, { history } from '../../store';
+import {SET_CATEGORIES} from "../../reducers/categories";
 
 describe('ItemForm', () => {
   let appComponent;
@@ -32,6 +33,7 @@ describe('ItemForm', () => {
     appComponent.update();
     const formComponent = appComponent.find(ItemForm).first();
     expect(dispatchMock.mock.calls).toHaveLength(1);
-    expect(formComponent.find('input [name="name"]')).toHaveLength(2);
+    expect(formComponent.find('input [name="name"]')).toHaveLength(1);
+    expect(formComponent.find('input [name="description"]')).toHaveLength(1);
   });
 });

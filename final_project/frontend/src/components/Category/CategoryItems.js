@@ -23,7 +23,12 @@ const CategoryItems = (props) => {
       <List component="nav">
         {categoriesLoading && <CircularProgress size={30} />}
         {!categoriesLoading && categories.map(category => (
-          <CategoryTag key={category.id} category={category} />
+          <div
+            key={category.id}
+            className={category.id === Number(category_id) ? 'item-active' : ''}
+          >
+            <CategoryTag category={category} />
+          </div>
         ))}
       </List>
     </div>

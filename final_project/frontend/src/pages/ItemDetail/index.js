@@ -37,7 +37,7 @@ class ItemDetail extends React.Component {
 
   render() {
     const {
-      item, itemLoading, currentUser, currentUserLoading, history: { goBack },
+      item, itemLoading, currentUser, currentUserLoading, itemSubmitting, history: { goBack },
     } = this.props;
     if (itemLoading || currentUserLoading) {
       return <CircularProgress size={68} />;
@@ -72,8 +72,10 @@ class ItemDetail extends React.Component {
               variant="contained"
               color="secondary"
               className="margin-right-10"
+              disabled={itemSubmitting}
             >
-              Delete
+              {itemSubmitting && <CircularProgress color="secondary" size={20} />}
+              &nbsp;Delete
             </Button>
             <Button component={Link} to={editURL} variant="contained" color="primary">
               Edit
@@ -92,6 +94,7 @@ ItemDetail.propTypes = {
   onOpenAlert: PropTypes.func.isRequired,
   item: PropTypes.object.isRequired,
   itemLoading: PropTypes.bool.isRequired,
+  itemSubmitting: PropTypes.bool.isRequired,
   currentUser: PropTypes.object.isRequired,
   currentUserLoading: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
@@ -99,11 +102,12 @@ ItemDetail.propTypes = {
 };
 
 const mapStateToProps = ({
-  item: { item, itemLoading },
+  item: { item, itemLoading, itemSubmitting },
   auth: { currentUser, currentUserLoading },
 }) => ({
   item,
   itemLoading,
+  itemSubmitting,
   currentUser,
   currentUserLoading,
 });

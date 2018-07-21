@@ -34,7 +34,12 @@ const Login = (props) => {
       <Typography variant="headline">
         Login with Google account
       </Typography>
-      <Button variant="contained" color="primary" onClick={googleLogin}>
+      <Button
+        onClick={googleLogin}
+        disabled={loginLoading}
+        variant="contained"
+        color="primary"
+      >
         {loginLoading && <CircularProgress color="secondary" size={20} />}
         &nbsp;Login with Google
       </Button>

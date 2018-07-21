@@ -41,7 +41,7 @@ class ItemForm extends React.Component {
 
   render() {
     const {
-      categories, categoriesLoading, onSubmit, history: { goBack },
+      categories, categoriesLoading, onSubmit, itemSubmitting, history: { goBack },
     } = this.props;
     if (categoriesLoading) {
       return <CircularProgress size={68} />;
@@ -95,8 +95,10 @@ class ItemForm extends React.Component {
             onClick={() => onSubmit({ name, description, category_id })}
             variant="contained"
             color="primary"
+            disabled={itemSubmitting}
           >
-            Submit
+            {itemSubmitting && <CircularProgress color="secondary" size={20} />}
+            &nbsp;Submit
           </Button>
         </div>
       </Grid>
@@ -105,11 +107,12 @@ class ItemForm extends React.Component {
 }
 
 ItemForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  onGetCategories: PropTypes.func.isRequired,
   categories: PropTypes.array.isRequired,
   categoriesLoading: PropTypes.bool.isRequired,
-  onGetCategories: PropTypes.func.isRequired,
+  itemSubmitting: PropTypes.bool.isRequired,
   item: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 
@@ -117,9 +120,13 @@ ItemForm.defaultProps = {
   item: { name: '', description: '', category_id: '' },
 };
 
-const mapStateToProps = ({ categories: { categories, categoriesLoading } }) => ({
+const mapStateToProps = ({
+  categories: { categories, categoriesLoading },
+  item: { itemSubmitting },
+}) => ({
   categories,
   categoriesLoading,
+  itemSubmitting,
 });
 
 const mapDispatchToProps = dispatch => ({
