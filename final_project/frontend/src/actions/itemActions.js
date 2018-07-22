@@ -55,7 +55,11 @@ export const editItem = ({
   return performRequest({
     dispatch,
     requestPromise: axios.patch(`/items/${id}/`, { name, description, category_id }),
-    onData: () => {
+    onData: ({ data: { item } }) => {
+      dispatch({
+        type: SET_ITEM,
+        payload: item,
+      });
       dispatch(push(`/items/${id}`));
       dispatch(openSnackbar({
         type: 'success',
