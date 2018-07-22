@@ -46,7 +46,7 @@ export const performRequest = ({
     dispatch(openSnackbar({ message: errorMessage, type: 'error' }));
 
     // Redirect to home with 404 error
-    if (error.response.status === 404) {
+    if (error.response && error.response.status === 404) {
       dispatch(push('/'));
     }
   } else {

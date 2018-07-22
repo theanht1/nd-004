@@ -9,8 +9,7 @@ export const AUTHORIZATION_COOKIE_NAME = 'c_t';
 
 // Set token to request header and cookie
 const setAccessToken = (token) => {
-  axios.defaults.headers.common.Authorization = token.length > 0
-    ? token : '';
+  axios.defaults.headers.common.Authorization = token;
   Cookies.set(AUTHORIZATION_COOKIE_NAME, token, { expires: 3 });
 };
 
