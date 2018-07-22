@@ -62,7 +62,7 @@ class ItemDetail extends React.Component {
         </Typography>
 
         <div className="margin-top-20 flex">
-          <Button onClick={() => goBack()} variant="contained" className="margin-right-10">
+          <Button onClick={goBack} variant="contained" className="margin-right-10">
             Back
           </Button>
           {isOwner && (

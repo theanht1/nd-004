@@ -35,4 +35,15 @@ describe('Header', () => {
       .filterWhere(item => item.prop('to') === '/login'))
       .toHaveLength(0);
   });
+
+  test('should logout', () => {
+    store.dispatch({
+      type: SET_CURRENT_USER,
+      payload: { id: 1, name: 'Name', email: 'email' },
+    });
+    const logoutBtn = appComponent.find(Button).last();
+    logoutBtn.props().onClick();
+    const { auth } = store.getState();
+    expect(auth.currentUser).toEqual({});
+  });
 });

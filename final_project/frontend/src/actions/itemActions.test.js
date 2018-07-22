@@ -1,6 +1,8 @@
 import axios from 'axios';
 import store from '../store';
-import {createItem, deleteItem, editItem, getItem} from './itemActions';
+import {
+  createItem, deleteItem, editItem, getItem,
+} from './itemActions';
 
 jest.mock('axios');
 
@@ -27,7 +29,7 @@ describe('itemActions', () => {
     axios.get.mockImplementation(() => Promise.resolve({
       data: { item: ITEM },
     }));
-    await store.dispatch(getItem({ item_id: ITEM.id}));
+    await store.dispatch(getItem({ item_id: ITEM.id }));
 
     const { item } = store.getState();
     expect(item.itemLoading).toBeFalsy();
@@ -51,6 +53,6 @@ describe('itemActions', () => {
 
     const { item } = store.getState();
     expect(item.itemSubmitting).toBeFalsy();
-    expect(item.item).toEqual({ name: '', description: '', category_id: 0});
+    expect(item.item).toEqual({ name: '', description: '', category_id: 0 });
   });
 });

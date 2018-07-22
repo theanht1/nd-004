@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import store from '../store';
-import {AUTHORIZATION_COOKIE_NAME, getCurrentUser, ggLogin, logout} from './authActions';
-import {SET_CURRENT_USER} from "../reducers/auth";
+import {
+  AUTHORIZATION_COOKIE_NAME, getCurrentUser, ggLogin, logout,
+} from './authActions';
+import { SET_CURRENT_USER } from '../reducers/auth';
 
 jest.mock('axios');
 
