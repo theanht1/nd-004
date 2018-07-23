@@ -26,3 +26,7 @@ yarn start
 ```bash
 yarn build
 ```
+* Testing
+```bash
+yarn test --coverage
+```
