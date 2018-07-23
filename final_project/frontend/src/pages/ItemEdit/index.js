@@ -18,8 +18,8 @@ class ItemEdit extends React.Component {
     const {
       currentUser, currentUserLoading, item, itemLoading, goHome,
     } = nextProps;
-    if (!currentUserLoading && !itemLoading && currentUser
-      && currentUser.id !== item.user_id) {
+    if (!currentUserLoading && !itemLoading && (!currentUser
+      || currentUser.id !== item.user_id)) {
       goHome();
     }
   }
